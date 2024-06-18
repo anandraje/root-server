@@ -375,7 +375,7 @@ const App = () => {
     document.body.removeChild(link);
   };
   const counts = getCountByRootInstance();
-
+  const totalCount = Object.values(counts).reduce((acc, count) => acc + count, 0);
   return (
     <div className='flex flex-col items-center'>
       <div className='flex p-[20px] h-[1000px] w-[1140px] bg-[#DCDCDC] flex-col'>
@@ -418,6 +418,11 @@ const App = () => {
                     <td className='w-[50vw] text-center'>{counts[label] || 0}</td>
                   </tr>
                 ))}
+                <tr className='bg-slate-300'>
+                <td className='w-[50vw] text-center'>Total</td>
+                <td className='w-[50vw] text-center'>{totalCount}</td>
+                </tr>
+               
               </tbody>
             </table>
             <button onClick={downloadCSV} className="mt-4 p-2 bg-blue-500 text-white rounded">Download CSV</button>
