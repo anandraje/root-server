@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
+
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -11,7 +12,8 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import axios from 'axios';
 import { useEffect } from 'react';
 import Legend from './Legend';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Select from "react-dropdown-select";
 const jsonFiles = ['A', 'B','C','D','E','F','G','H','I','J','K','L','M'];
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -69,10 +71,11 @@ const App = () => {
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [checkedLabels, setCheckedLabels] = useState([]);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [combinedData, setCombinedData] = useState([]);
 
-  
+  const [combinedData, setCombinedData] = useState([]);
+  const [values, setvalues] = useState([]);
+
+
   const continentToCountries = {
     Asia: [
       { code: 'AE', name: 'United Arab Emirates' },
@@ -286,11 +289,20 @@ const App = () => {
       { code: 'PW', name: 'Palau' }
     ]};
     
-    
+    const findCountryNameByCode = (code) => {
+      for (const region in continentToCountries) {
+        const countries = continentToCountries[region];
+        const country = countries.find(country => country.code === code);
+        if (country) {
+          return country.name;
+        }
+      }
+      return null; // Return null if code is not found
+    };
     
 
-    // const combinedData = [...A, ...B, ...C ,...D,...E,...F,...G,...H,...I,...J,...K,...l,...M];
-  // Flatten the data structure to create markers
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -301,7 +313,7 @@ const App = () => {
           })
         );
         setCombinedData(fetchedData.flat()); // Assuming each JSON is an array of objects
-        setDataLoaded(true);
+     
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -317,8 +329,9 @@ const App = () => {
     Latitude: site.Latitude,
     Longitude: site.Longitude,
     ID: Math.random(),
-
+    ipv6:site.IPv6,
     IPv4: data.IPv4,
+    type:site.Type,
     Operator:data.Operator,
     IPv6: data.IPv6,
     ASN: data.ASN,
@@ -367,6 +380,8 @@ const App = () => {
     return counts;
    
   };
+
+
   const downloadCSV = () => {
     const csvRows = [
       ["Root Instance", "Count"],
@@ -385,10 +400,91 @@ const App = () => {
   };
   const counts = getCountByRootInstance();
   const totalCount = Object.values(counts).reduce((acc, count) => acc + count, 0);
-console.log(markers)
+console.log(markers);
+const filteredMarkersForTable = values.length === 0 ? markers : markers.filter(marker =>
+  values.includes(marker.rootInstanceName)
+);
+const markerTable2 = {};
+filteredMarkersForTable.forEach(marker => {
+  if (!markerTable2[marker.country]) {
+    markerTable2[marker.country] = marker;
+  }
+});
+const uniqueCountryMarkers = Object.values(markerTable2);
+
+const getCountByCountry = () => {
+  const count = filteredMarkersForTable.reduce((acc, marker) => {
+    const { country, Instances } = marker;
+    if (!acc[country]) {
+      acc[country] = {
+        count: 0,
+        instances: 0,
+      };
+    }
+    acc[country].count++;
+    acc[country].instances += Instances;
+    return acc;
+  }, {});
+
+  return count;
+};
+
+getCountByCountry();
+console.log("hii",filteredMarkersForTable);
+const options = [
+  { value: 'A', label: 'A' },
+  { value: 'B', label: 'B' },
+  { value: 'C', label: 'C' },
+  { value: 'D', label: 'D' },
+  { value: 'E', label: 'E' },
+  { value: 'F', label: 'F' },
+  { value: 'G', label: 'G' },
+  { value: 'H', label: 'H' },
+  { value: 'I', label: 'I' },
+  { value: 'J', label: 'J' },
+  { value: 'K', label: 'K' },
+  { value: 'L', label: 'L' },
+  { value: 'M', label: 'M' },
+];
+const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+  const maxPageNumbersToShow = 5;
+
+  // Calculate the indexes of the first and last items on the current page
+  const indexOfLastItem = currentPage * rowsPerPage;
+  const indexOfFirstItem = indexOfLastItem - rowsPerPage;
+  const currentItems = filteredMarkersForTable.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Get total pages
+  const totalPages = Math.ceil(filteredMarkersForTable.length / rowsPerPage);
+
+  // Calculate the range of page numbers to show
+  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+  const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const [currentPage_2, setCurrentPage_2] = useState(1);
+  const rowsPerPage_2 = 5;
+  const maxPageNumbersToShow_2 = 5;
+
+  // Calculate the indexes of the first and last items on the current page
+  const indexOfLastItem_2 = currentPage_2 * rowsPerPage_2;
+  const indexOfFirstItem_2 = indexOfLastItem_2 - rowsPerPage_2;
+  const currentItems_2 = uniqueCountryMarkers.slice(indexOfFirstItem_2, indexOfLastItem_2);
+
+  // Get total pages
+  const totalPages_2 = Math.ceil(uniqueCountryMarkers.length / rowsPerPage_2);
+
+  // Calculate the range of page numbers to show_2
+  const startPage_2 = Math.max(1, currentPage_2 - Math.floor(maxPageNumbersToShow_2 / 2));
+  const endPage_2 = Math.min(totalPages_2, startPage_2 + maxPageNumbersToShow_2 - 1);
+
+  const paginate_2 = (pageNumber) => setCurrentPage_2(pageNumber);
+
   return (
     <div className='flex flex-col items-center'>
-      <div className='flex p-[20px] h-[1000px] w-[1140px] bg-[#DCDCDC] flex-col'>
+      <div className='flex p-[20px] h-[full] w-[1140px] bg-[#DCDCDC] flex-col'>
         <MapContainer center={[51.505, -0.09]} zoom={2} style={{ height: "500px", width: "1100px" }} className='relative' ref={mapRef} minZoom={2} maxZoom={10} worldCopyJump={true} maxBounds={bounds} maxBoundsViscosity={1.0} >
           <TileLayer url="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=gAqMvillSWIbJwin1cPn" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
           <MarkerClusterGroup showCoverageOnHover={false} zoomToBoundsOnClick={true} spiderfyOnMaxZoom={true}>
@@ -401,7 +497,7 @@ console.log(markers)
                   <div className='flex  gap-5   '>
                     
                     
-                    <div className='text-xl font-extrabold bg-slate-100 w-full py-4 px-2'>{marker.name} ,{marker.country}</div>
+                    <div className='text-xl font-extrabold bg-slate-100 w-full py-4 px-2'>{marker.name}, {marker.country}</div>
                     
                     
                   </div>
@@ -426,7 +522,7 @@ console.log(markers)
                   </div>
                   <div className='flex  gap-5 bg-slate-100 items-center p-2 '>
                     
-                    <div className='w-[3.5rem] font-extrabold 2'>ASN</div>
+                    <div className='w-[3.5rem] font-extrabold '>ASN</div>
                     <div>{marker.ASN}</div>
                     
                   </div>
@@ -451,7 +547,7 @@ console.log(markers)
           <div>
             <table className="beautiful-table">
               <thead>
-                <tr>
+                <tr className='text-center'>
                   <th className='bg-slate-100'>Root Instance</th>
                   <th className='bg-slate-100'>Count</th>
                 </tr>
@@ -472,6 +568,120 @@ console.log(markers)
             </table>
             <button onClick={downloadCSV} className="mt-4 p-2 bg-blue-500 text-white rounded">Download CSV</button>
           </div>
+        </div>
+        <div className='py-5'>
+        <Select
+            options={options}
+            labelField="label"
+            valueField="value"
+            onChange={(values) => {
+              setvalues(values.map(v => v.value));
+              setCurrentPage(1); // Reset pagination for table 1
+              setCurrentPage_2(1); // Reset pagination for table 2
+            }}
+            style={{ width: "80px", backgroundColor: "white", color: "black" }}
+            searchable={false}
+            placeholder={"Roots"}
+            dropdownGap={0}
+            
+          />
+          <div className='py-3'>
+          <table className="beautiful-table">
+        <thead>
+          <tr className='text-center'>
+            <th className='bg-slate-100'>City</th>
+            <th className='bg-slate-100'>Country</th>
+            <th className='bg-slate-100'>Type</th>
+            <th className='bg-slate-100'>IPv6 Enabled</th>
+            <th className='bg-slate-100'>Instances</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((marker, index) => (
+            <tr key={marker.ID} className={index % 2 === 0 ? 'bg-slate-200' : 'bg-slate-100'}>
+              <td className='w-[50vw] text-center'>{marker.name}</td>
+              <td className='w-[50vw] text-center'>{findCountryNameByCode(marker.country)}</td>
+              <td className='w-[50vw] text-center'>{marker.type}</td>
+              <td className='w-[50vw] text-center'>{marker.ipv6 ? 'Yes' : 'No'}</td>
+              <td className='w-[50vw] text-center'>{marker.Instances}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <nav className='py-2'>
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 && 'disabled'} hover:cursor-pointer`}>
+            <li className="page-link"  aria-label="Previous" onClick={() => paginate(currentPage - 1)}>
+              <span aria-hidden="true">&laquo;</span>
+              <span className="sr-only">Previous</span>
+            </li>
+          </li>
+          {[...Array(endPage - startPage + 1).keys()].map(i => (
+            <li key={i + startPage} className={`page-item ${currentPage === i + startPage ? 'active' : ''} hover:cursor-pointer`}>
+              <li onClick={() => paginate(i + startPage)} className="page-link" >
+                {i + startPage}
+              </li>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages && 'disabled'} hover:cursor-pointer`}>
+            <li className="page-link"  aria-label="Next" onClick={() => paginate(currentPage + 1)}>
+              <span aria-hidden="true">&raquo;</span>
+              <span className="sr-only">Next</span>
+            </li>
+          </li>
+        </ul>
+      </nav>
+    </div>
+ 
+<div className='py-3'>
+<table className="beautiful-table">
+        <thead>
+          <tr className='text-center'>
+            <th className='bg-slate-100'>Country</th>
+            <th className='bg-slate-100'>Sites</th>
+        
+            <th className='bg-slate-100'>Instances</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems_2.map((marker, index) => (
+            <tr key={marker.ID} className={index % 2 === 0 ? 'bg-slate-200' : 'bg-slate-100'}>
+              <td className='w-[50vw] text-center'>{findCountryNameByCode(marker.country)}</td>
+            
+               <td data-tip="hii" className='w-[50vw] text-center'>{getCountByCountry()[marker.country]?.count}</td>
+            
+              <td className='w-[50vw] text-center'>{getCountByCountry()[marker.country]?.instances || 0}</td>
+            </tr>
+          ))}
+          
+        </tbody>
+       
+      </table>
+      <nav className='py-2'>
+        <ul className="pagination">
+          <li className={`page-item ${currentPage_2 === 1 && 'disabled'} hover:cursor-pointer`}>
+            <li className="page-link"  aria-label="Previous" onClick={() => paginate_2(currentPage_2 - 1)}>
+              <span aria-hidden="true">&laquo;</span>
+              <span className="sr-only">Previous</span>
+            </li>
+          </li>
+          {[...Array(endPage_2 - startPage_2 + 1).keys()].map(i => (
+            <li key={i + startPage_2} className={`page-item ${currentPage_2 === i + startPage_2 ? 'active' : ''} hover:cursor-pointer`}>
+              <li onClick={() => paginate_2(i + startPage_2)} className="page-link" >
+                {i + startPage_2}
+              </li>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage_2 === totalPages_2 && 'disabled'} hover:cursor-pointer`}>
+            <li className="page-link"  aria-label="Next" onClick={() => paginate_2(currentPage_2 + 1)}>
+              <span aria-hidden="true">&raquo;</span>
+              <span className="sr-only">Next</span>
+            </li>
+          </li>
+        </ul>
+      </nav>
+    
+</div>
         </div>
       </div>
     </div>

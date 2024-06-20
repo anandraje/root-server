@@ -1,5 +1,5 @@
 import React from 'react'
-import { jsonData } from './data'
+
 import * as Icon from "react-icons/fi";
 import Checkbox from "react-custom-checkbox";
 import { useState } from 'react';
@@ -79,7 +79,7 @@ const Legend = ({countrycode, sendCheckedLabels,continentselected}) => {
 </div>
 <div>
         <div>Country</div>
-            <select id="countrySelect" onChange={(e) => sendCountryToApp(e.target.value)}>
+            <select className='h-7' onChange={(e) => sendCountryToApp(e.target.value)}>
             <option value="All">---select---</option>
     <option value="AE">United Arab Emirates</option>
     <option value="AF">Afghanistan</option>
