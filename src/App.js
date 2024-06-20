@@ -308,7 +308,7 @@ const App = () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            const response = await axios.get(`http://localhost:5001/api/${fileName}`); // Adjust URL as per your API endpoint
+            const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`); // Adjust URL as per your API endpoint
             return response.data;
           })
         );
