@@ -1,6 +1,9 @@
 {
   "name": "my-leaflet-app",
   "version": "0.1.0",
+  "proxy": "https://root-servers.org",
+
+
   "private": true,
   "dependencies": {
     "@maptiler/leaflet-maptilersdk": "^2.0.0",

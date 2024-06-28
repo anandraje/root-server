@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
-import Pie from "./Pie.js";
+
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -345,18 +345,16 @@ const App = () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            // const response = await axios.get(`http://localhost:5001/api/${fileName}`); // Adjust URL as per your API endpoint
-            const response = await axios.get(
-              `https://root-servers.org/root/${fileName}/json/`
-            );
+            const response = await axios.get(`/root/${fileName}/json/`);
             return response.data;
           })
         );
-        setCombinedData(fetchedData.flat()); // Assuming each JSON is an array of objects
+        setCombinedData(fetchedData.flat()); 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+    
 
     fetchData();
   }, []);
@@ -788,35 +786,35 @@ const App = () => {
           />
         </div>
         <div className="w-full overflow-x-auto">
-          <table className="table-auto w-full">
+          <table className="table-auto w-full text-center">
             <thead>
               <tr className="bg-gray-200">
                 <th
-                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")}`}
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")} w-1/5`}
                   onClick={() => requestSort("name")}
                 >
                   City {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
                 <th
-                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Country")}`}
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Country")} w-1/5`}
                   onClick={() => requestSort("Country")}
                 >
                   Country {sortConfig.key === 'Country' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
                 <th
-                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("type")}`}
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("type")} w-1/5`}
                   onClick={() => requestSort("type")}
                 >
                   Type {sortConfig.key === 'type' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
                 <th
-                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("ipv6")}`}
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("ipv6")} w-1/5`}
                   onClick={() => requestSort("ipv6")}
                 >
                   IPv6 Enabled {sortConfig.key === 'ipv6' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
                 <th
-                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")}`}
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")} w-1/5`}
                   onClick={() => requestSort("Instances")}
                 >
                   Instances {sortConfig.key === 'Instances' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
@@ -826,11 +824,11 @@ const App = () => {
             <tbody>
               {currentItems.map((marker, index) => (
                 <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
-                  <td className="px-4 py-2">{marker.name}</td>
-                  <td className="px-4 py-2">{findCountryNameByCode(marker.country)}</td>
-                  <td className="px-4 py-2">{marker.type}</td>
-                  <td className="px-4 py-2">{marker.ipv6 ? "Yes" : "No"}</td>
-                  <td className="px-4 py-2">{marker.Instances}</td>
+                  <td className="px-4 py-2 w-1/5">{marker.name}</td>
+                  <td className="px-4 py-2 w-1/5">{findCountryNameByCode(marker.country)}</td>
+                  <td className="px-4 py-2 w-1/5">{marker.type}</td>
+                  <td className="px-4 py-2 w-1/5">{marker.ipv6 ? "Yes" : "No"}</td>
+                  <td className="px-4 py-2 w-1/5">{marker.Instances}</td>
                 </tr>
               ))}
             </tbody>
@@ -860,7 +858,7 @@ const App = () => {
           </nav>
         </div>
         <div className="w-full overflow-x-auto">
-          <table className="table-auto w-full">
+          <table className="table-auto w-full text-center">
             <thead>
               <tr className="bg-gray-200">
                 <th
@@ -886,9 +884,9 @@ const App = () => {
             <tbody>
               {currentItems_2.map((marker, index) => (
                 <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
-                  <td className="px-4 py-2">{findCountryNameByCode(marker.country)}</td>
-                  <td className="px-4 py-2">{getCountByCountry()[marker.country]?.count}</td>
-                  <td className="px-4 py-2">{getCountByCountry()[marker.country]?.instances || 0}</td>
+                  <td className="px-4 py-2 w-1/3">{findCountryNameByCode(marker.country)}</td>
+                  <td className="px-4 py-2 w-1/3">{getCountByCountry()[marker.country]?.count}</td>
+                  <td className="px-4 py-2 w-1/3">{getCountByCountry()[marker.country]?.instances || 0}</td>
                 </tr>
               ))}
             </tbody>
