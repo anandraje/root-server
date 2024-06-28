@@ -345,7 +345,8 @@ const App = () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
+            // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
+            const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
             return response.data;
           })
         );
