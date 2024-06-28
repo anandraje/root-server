@@ -108,10 +108,15 @@ const App = ({ data }) => {
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-        <label htmlFor="chart-select">Select Root: </label>
-        <select id="chart-select" value={selectedKey} onChange={handleSelectChange}>
+    <div className="p-4">
+      <div className="mb-4 text-center">
+        <label htmlFor="chart-select">Select Root:</label>
+        <select
+          id="chart-select"
+          value={selectedKey}
+          onChange={handleSelectChange}
+          className="block w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        >
           <option value="">All</option>
           {Object.keys(data).map((key) => (
             <option key={key} value={key}>
@@ -120,12 +125,14 @@ const App = ({ data }) => {
           ))}
         </select>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '50%', padding: '10px', cursor: 'pointer' }}>
-          <h3 style={{ textAlign: 'center' }}>{selectedKey ? `Roots ${selectedKey}` : 'All Roots'}</h3>
+      <div className="flex justify-center">
+        <div className="w-full lg:w-1/2 p-4 cursor-pointer">
+          <h3 className="text-center">
+            {selectedKey ? `Roots ${selectedKey}` : 'All Roots'}
+          </h3>
           <PieChartComponent dataKey={selectedKey} data={data} />
         </div>
-        </div>
+      </div>
     </div>
   );
 };

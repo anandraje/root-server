@@ -663,12 +663,12 @@ const App = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex p-[20px] h-[full] w-[1140px] bg-[#DCDCDC] flex-col">
-        <MapContainer
+       <div className="flex p-2 lg:p-4 w-full lg:w-3/4 bg-gray-300 flex-col absolute">
+      <MapContainer
           center={[51.505, -0.09]}
           zoom={2}
-          style={{ height: "500px", width: "1100px" }}
-          className="relative"
+          className="w-full h-[60vh]  relative"
+      
           ref={mapRef}
           minZoom={2}
           maxZoom={10}
@@ -692,90 +692,74 @@ const App = () => {
                   selectedCountry === "All") &&
                 (checkedLabels.length === 0 ||
                   checkedLabels.includes(marker.rootInstanceName)) && (
-                  <Marker
-                    key={marker.ID}
-                    position={[marker.Latitude, marker.Longitude]}
-                    icon={createCustomIcon(
-                      colorMapping[marker.rootInstanceName],
-                      marker.rootInstanceName
-                    )}
-                  >
-                    <Popup>
-                      <div className="border-[0.005rem] border-slate-300">
-                        <div className="flex  gap-5   ">
-                          <div className="text-xl font-extrabold bg-slate-100 w-full py-4 px-2">
+                    <Marker
+                      key={marker.ID}
+                      position={[marker.Latitude, marker.Longitude]}
+                      icon={createCustomIcon(
+                        colorMapping[marker.rootInstanceName],
+                        marker.rootInstanceName
+                      )}
+                    >
+                      <Popup>
+                        <div className="border border-gray-400 p-2">
+                          <div className="font-bold bg-gray-100 p-2">
                             {marker.name}, {marker.country}
                           </div>
-                        </div>
-                        <div className="flex  gap-5 items-center p-2">
-                          <div className=" font-extrabold w-[3.5rem] ">
-                            Operator
+                          <div className="flex gap-2 items-center p-2">
+                            <div className="font-bold w-[5rem]">Operator</div>
+                            <div className="text-sm">{marker.Operator}</div>
                           </div>
-                          <div className="font-light text-sm">
-                            {marker.Operator}
+                          <div className="flex gap-2 bg-gray-100 items-center p-2">
+                            <div className="w-[5rem] font-bold">IPv4</div>
+                            <div>{marker.IPv4}</div>
                           </div>
-                        </div>
-                        <div className="flex  gap-5 bg-slate-100 w-full items-center p-2">
-                          <div className="w-[3.5rem] font-extrabold  ">
-                            IPv4
+                          <div className="flex gap-2 items-center p-2">
+                            <div className="w-[5rem] font-bold">IPv6</div>
+                            <div>{marker.IPv6}</div>
                           </div>
-                          <div>{marker.IPv4}</div>
-                        </div>
-                        <div className="flex  gap-5 items-center p-2">
-                          <div className="w-[3.5rem] font-extrabold ">IPv6</div>
-                          <div>{marker.IPv6}</div>
-                        </div>
-                        <div className="flex  gap-5 bg-slate-100 items-center p-2 ">
-                          <div className="w-[3.5rem] font-extrabold ">ASN</div>
-                          <div>{marker.ASN}</div>
-                        </div>
-
-                        {marker.Instances !== 1 && (
-                          <div className="flex  gap-5 items-center p-2 ">
-                            <div className=" font-extrabold w-[3.5rem]">
-                              Instances
+                          <div className="flex gap-2 bg-gray-100 items-center p-2">
+                            <div className="w-[5rem] font-bold">ASN</div>
+                            <div>{marker.ASN}</div>
+                          </div>
+                          {marker.Instances !== 1 && (
+                            <div className="flex gap-2 items-center p-2">
+                              <div className="font-bold w-[5rem]">Instances</div>
+                              <div>{marker.Instances}</div>
                             </div>
-                            <div>{marker.Instances}</div>
-                          </div>
-                        )}
-                      </div>
-                    </Popup>
-                  </Marker>
-                )
+                          )}
+                        </div>
+                      </Popup>
+                    </Marker>
+                  )
             )}
           </MarkerClusterGroup>
         </MapContainer>
-        <div className="flex gap-[20px]">
-          <Legend
-            countrycode={handleCountrySelection}
-            sendCheckedLabels={handleCheckedLabels}
-            continentselected={handleContinentSelection}
-          />
-          <div>
-            <table className="beautiful-table">
+        <div className="flex flex-col justify-between lg:flex-row gap-2 lg:gap-4 w-full">
+          <div className="w-full lg:w-2/5 ">
+            <Legend
+              countrycode={handleCountrySelection}
+              sendCheckedLabels={handleCheckedLabels}
+              continentselected={handleContinentSelection}
+            />
+          </div>
+          <div className="w-full lg:w-2/5 justify-end">
+            <table className="table-auto w-full">
               <thead>
-                <tr className="text-center">
-                  <th className="bg-slate-100">Root Instance</th>
-                  <th className="bg-slate-100">Count</th>
+                <tr className="bg-gray-200">
+                  <th className="px-4 py-2">Root Instance</th>
+                  <th className="px-4 py-2">Count</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.keys(colorMapping).map((label, index) => (
-                  <tr
-                    key={label}
-                    className={
-                      index % 2 === 0 ? "bg-slate-200" : "bg-slate-100"
-                    }
-                  >
-                    <td className="w-[50vw] text-center">{label}</td>
-                    <td className="w-[50vw] text-center">
-                      {counts[label] || 0}
-                    </td>
+                  <tr key={label} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
+                    <td className="px-4 py-2">{label}</td>
+                    <td className="px-4 py-2">{counts[label] || 0}</td>
                   </tr>
                 ))}
-                <tr className="bg-slate-100">
-                  <td className="w-[50vw] text-center">Total</td>
-                  <td className="w-[50vw] text-center">{totalCount}</td>
+                <tr className="bg-gray-200">
+                  <td className="px-4 py-2">Total</td>
+                  <td className="px-4 py-2">{totalCount}</td>
                 </tr>
               </tbody>
             </table>
@@ -787,7 +771,7 @@ const App = () => {
             </button>
           </div>
         </div>
-        <div className="py-5">
+        <div className="w-full">
           <Select
             options={options}
             labelField="label"
@@ -802,195 +786,142 @@ const App = () => {
             placeholder={"Roots"}
             dropdownGap={0}
           />
-          <div className="py-3">
-            <table className="beautiful-table">
-              <thead>
-                <tr className="text-center">
-                  <th
-                    className={`bg-slate-100 ${getClassNamesFor("name")}`}
-                    onClick={() => requestSort("name")}
-                  >
-                    City {sortConfig.key === "name" ? (sortConfig.direction === '↑' ? '↑' : '↓') : '↑↓'}
-                  </th>
-                  <th
-                    className={`bg-slate-100 ${getClassNamesFor("Country")}`}
-                    onClick={() => requestSort("Country")}
-                  >
-                    Country {sortConfig.key === 'Country' ? (sortConfig.direction === '↑' ? '↑' : '↓') : '↑↓'}
-                  </th>
-                  <th
-                    className={`bg-slate-100 ${getClassNamesFor("type")}`}
-                    onClick={() => requestSort("type")}
-                  >
-                    Type {sortConfig.key === "type" ? (sortConfig.direction === '↑' ? '↑' : '↓') : '↑↓'}
-                  </th>
-                  <th
-                    className={`bg-slate-100 ${getClassNamesFor("ipv6")}`}
-                    onClick={() => requestSort("ipv6")}
-                  >
-                    IPv6 Enabled{" "}
-                    {sortConfig.key === "ipv6"? (sortConfig.direction === '↑' ? '↑' : '↓') : '↑↓'}
-                  </th>
-                  <th
-                    className={`bg-slate-100 ${getClassNamesFor("Instances")}`}
-                    onClick={() => requestSort("Instances")}
-                  >
-                    Instances{" "}
-                    {sortConfig.key === "Instances" ? (sortConfig.direction === '↑' ? '↑' : '↓') : '↑↓'}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((marker, index) => (
-                  <tr
-                    key={marker.ID}
-                    className={
-                      index % 2 === 0 ? "bg-slate-200" : "bg-slate-100"
-                    }
-                  >
-                    <td className="w-[15rem] text-center">{marker.name}</td>
-                    <td className="w-[15rem] text-center">
-                      {findCountryNameByCode(marker.country)}
-                    </td>
-                    <td className="w-[15rem] text-center">{marker.type}</td>
-                    <td className="w-[15rem] text-center">
-                      {marker.ipv6 ? "Yes" : "No"}
-                    </td>
-                    <td className="w-[15rem] text-center">
-                      {marker.Instances}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <nav className="py-2">
-              <ul className="pagination">
-                <li
-                  className={`page-item ${
-                    currentPage === 1 && "disabled"
-                  } hover:cursor-pointer`}
-                >
-                  <li
-                    className="page-link"
-                    aria-label="Previous"
-                    onClick={() => paginate(currentPage - 1)}
-                  >
-                    <span aria-hidden="true">&laquo;</span>
-                    <span className="sr-only">Previous</span>
-                  </li>
-                </li>
-                {[...Array(endPage - startPage + 1).keys()].map((i) => (
-                  <li
-                    key={i + startPage}
-                    className={`page-item ${
-                      currentPage === i + startPage ? "active" : ""
-                    } hover:cursor-pointer`}
-                  >
-                    <li
-                      onClick={() => paginate(i + startPage)}
-                      className="page-link"
-                    >
-                      {i + startPage}
-                    </li>
-                  </li>
-                ))}
-                <li
-                  className={`page-item ${
-                    currentPage === totalPages && "disabled"
-                  } hover:cursor-pointer`}
-                >
-                  <li
-                    className="page-link"
-                    aria-label="Next"
-                    onClick={() => paginate(currentPage + 1)}
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                    <span className="sr-only">Next</span>
-                  </li>
-                </li>
-              </ul>
-            </nav>{" "}
-          </div>
-
-          <div className="py-3">
-          <table className="beautiful-table">
+        </div>
+        <div className="w-full overflow-x-auto">
+          <table className="table-auto w-full">
             <thead>
-              <tr className='text-center'>
-                <th className={`bg-slate-100 ${getClassNamesFor2('Country')}`} onClick={() => requestSort2('Country')}>
-                  Country {sortConfig2.key === 'Country' ? (sortConfig2.direction === '↑' ? '↑' : '↓') : '↑↓'}
+              <tr className="bg-gray-200">
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")}`}
+                  onClick={() => requestSort("name")}
+                >
+                  City {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
-                <th className={`bg-slate-100 ${getClassNamesFor2('Sites')}`} onClick={() => requestSort2('Sites')}>
-                  Sites {sortConfig2.key === 'Sites' ? (sortConfig2.direction === '↑' ? '↑' : '↓') : '↑↓'}
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Country")}`}
+                  onClick={() => requestSort("Country")}
+                >
+                  Country {sortConfig.key === 'Country' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
-                <th className={`bg-slate-100 ${getClassNamesFor2('Instances')}`} onClick={() => requestSort2('Instances')}>
-                  Instances {sortConfig2.key === 'Instances' ? (sortConfig2.direction === '↑' ? '↑' : '↓') : '↑↓'}
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("type")}`}
+                  onClick={() => requestSort("type")}
+                >
+                  Type {sortConfig.key === 'type' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
+                </th>
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("ipv6")}`}
+                  onClick={() => requestSort("ipv6")}
+                >
+                  IPv6 Enabled {sortConfig.key === 'ipv6' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
+                </th>
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")}`}
+                  onClick={() => requestSort("Instances")}
+                >
+                  Instances {sortConfig.key === 'Instances' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.map((marker, index) => (
+                <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
+                  <td className="px-4 py-2">{marker.name}</td>
+                  <td className="px-4 py-2">{findCountryNameByCode(marker.country)}</td>
+                  <td className="px-4 py-2">{marker.type}</td>
+                  <td className="px-4 py-2">{marker.ipv6 ? "Yes" : "No"}</td>
+                  <td className="px-4 py-2">{marker.Instances}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <nav className="py-2">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''} hover:cursor-pointer`}>
+                <li className="page-link" aria-label="Previous" onClick={() => paginate(currentPage - 1)}>
+                  <span aria-hidden="true">&laquo;</span>
+                  <span className="sr-only">Previous</span>
+                </li>
+              </li>
+              {[...Array(endPage - startPage + 1).keys()].map((i) => (
+                <li key={i + startPage} className={`page-item ${currentPage === i + startPage ? 'active' : ''} hover:cursor-pointer`}>
+                  <li onClick={() => paginate(i + startPage)} className="page-link">
+                    {i + startPage}
+                  </li>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''} hover:cursor-pointer`}>
+                <li className="page-link" aria-label="Next" onClick={() => paginate(currentPage + 1)}>
+                  <span aria-hidden="true">&raquo;</span>
+                  <span className="sr-only">Next</span>
+                </li>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div className="w-full overflow-x-auto">
+          <table className="table-auto w-full">
+            <thead>
+              <tr className="bg-gray-200">
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Country')}`}
+                  onClick={() => requestSort2('Country')}
+                >
+                  Country {sortConfig2.key === 'Country' ? (sortConfig2.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
+                </th>
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Sites')}`}
+                  onClick={() => requestSort2('Sites')}
+                >
+                  Sites {sortConfig2.key === 'Sites' ? (sortConfig2.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
+                </th>
+                <th
+                  className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Instances')}`}
+                  onClick={() => requestSort2('Instances')}
+                >
+                  Instances {sortConfig2.key === 'Instances' ? (sortConfig2.direction === 'ascending' ? '↑' : '↓') : '↑↓'}
                 </th>
               </tr>
             </thead>
             <tbody>
               {currentItems_2.map((marker, index) => (
-                <tr key={marker.ID} className={index % 2 === 0 ? 'bg-slate-200' : 'bg-slate-100'}>
-                  <td className='w-[50vw] text-center'>{findCountryNameByCode(marker.country)}</td>
-                  <td className='w-[50vw] text-center'>{getCountByCountry()[marker.country]?.count}</td>
-                  <td className='w-[50vw] text-center'>{getCountByCountry()[marker.country]?.instances || 0}</td>
+                <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
+                  <td className="px-4 py-2">{findCountryNameByCode(marker.country)}</td>
+                  <td className="px-4 py-2">{getCountByCountry()[marker.country]?.count}</td>
+                  <td className="px-4 py-2">{getCountByCountry()[marker.country]?.instances || 0}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-            <nav className="py-2">
-              <ul className="pagination">
-                <li
-                  className={`page-item ${
-                    currentPage_2 === 1 && "disabled"
-                  } hover:cursor-pointer`}
-                >
-                  <li
-                    className="page-link"
-                    aria-label="Previous"
-                    onClick={() => paginate_2(currentPage_2 - 1)}
-                  >
-                    <span aria-hidden="true">&laquo;</span>
-                    <span className="sr-only">Previous</span>
+          <nav className="py-2">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage_2 === 1 ? 'disabled' : ''} hover:cursor-pointer`}>
+                <li className="page-link" aria-label="Previous" onClick={() => paginate_2(currentPage_2 - 1)}>
+                  <span aria-hidden="true">&laquo;</span>
+                  <span className="sr-only">Previous</span>
+                </li>
+              </li>
+              {[...Array(endPage_2 - startPage_2 + 1).keys()].map((i) => (
+                <li key={i + startPage_2} className={`page-item ${currentPage_2 === i + startPage_2 ? 'active' : ''} hover:cursor-pointer`}>
+                  <li onClick={() => paginate_2(i + startPage_2)} className="page-link">
+                    {i + startPage_2}
                   </li>
                 </li>
-                {[...Array(endPage_2 - startPage_2 + 1).keys()].map((i) => (
-                  <li
-                    key={i + startPage_2}
-                    className={`page-item ${
-                      currentPage_2 === i + startPage_2 ? "active" : ""
-                    } hover:cursor-pointer`}
-                  >
-                    <li
-                      onClick={() => paginate_2(i + startPage_2)}
-                      className="page-link"
-                    >
-                      {i + startPage_2}
-                    </li>
-                  </li>
-                ))}
-                <li
-                  className={`page-item ${
-                    currentPage_2 === totalPages_2 && "disabled"
-                  } hover:cursor-pointer`}
-                >
-                  <li
-                    className="page-link"
-                    aria-label="Next"
-                    onClick={() => paginate_2(currentPage_2 + 1)}
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                    <span className="sr-only">Next</span>
-                  </li>
+              ))}
+              <li className={`page-item ${currentPage_2 === totalPages_2 ? 'disabled' : ''} hover:cursor-pointer`}>
+                <li className="page-link" aria-label="Next" onClick={() => paginate_2(currentPage_2 + 1)}>
+                  <span aria-hidden="true">&raquo;</span>
+                  <span className="sr-only">Next</span>
                 </li>
-              </ul>
-            </nav>
-          </div>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <div className="font-extrabold text-3xl text-center p-3">
+        <div className="font-bold text-2xl text-center p-3">
           World Root Instances
         </div>
         <Piechart data={aggregatedData} />
-        <div className="font-extrabold text-3xl text-center p-3">
+        <div className="font-bold text-2xl text-center p-3">
           Asia Instances
         </div>
         <Piechart data={aggregatedDataAsia} />
@@ -999,4 +930,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;

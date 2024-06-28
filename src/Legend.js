@@ -56,31 +56,32 @@ const Legend = ({countrycode, sendCheckedLabels,continentselected}) => {
       };
       
   return (
-    
-    
     <>
     <div className='flex flex-col'>
-    <div className='flex gap-5'>
-    
-    <div>
-    <div>
-        Continent
-    </div>
-    <select className='h-7'  onChange={(e) => sendContinenttoApp(e.target.value)} >
-    <option value="All">---select---</option>
-        <option value="Asia">Asia</option>
-        <option value="North_America">North America</option>
-        <option value="South_America">South America</option>
-        <option value="Australia">Austraila</option>
-        <option value="Africa">Africa</option>
-        <option value="Europe">Europe</option>
-
-    </select>
-</div>
-<div>
-        <div>Country</div>
-            <select className='h-7' onChange={(e) => sendCountryToApp(e.target.value)}>
-            <option value="All">---select---</option>
+        <div className='flex lg:flex-row flex-col gap-2 lg:gap-5'>
+          <div>
+            <div>Continent</div>
+            <select
+              className='h-7'
+              onChange={(e) => sendContinenttoApp(e.target.value)}
+            >
+              <option value='All'>---select---</option>
+              <option value='Asia'>Asia</option>
+              <option value='North_America'>North America</option>
+              <option value='South_America'>South America</option>
+              <option value='Australia'>Australia</option>
+              <option value='Africa'>Africa</option>
+              <option value='Europe'>Europe</option>
+            </select>
+          </div>
+          <div>
+            <div>Country</div>
+            <select
+              className='h-7'
+              onChange={(e) => sendCountryToApp(e.target.value)}
+            >
+              <option value='All'>---select---</option>
+              <option value="All">---select---</option>
     <option value="AE">United Arab Emirates</option>
     <option value="AF">Afghanistan</option>
     <option value="AL">Albania</option>
@@ -256,74 +257,71 @@ const Legend = ({countrycode, sendCheckedLabels,continentselected}) => {
     <option value="ZA">South Africa</option>
     <option value="ZM">Zambia</option>
     <option value="ZW">Zimbabwe</option>
-    </select>
-    </div>
-    
-    </div>
-    <div className='flex flex-col'>
-        <div>Root Instances</div>
-        <div className='flex gap-[40px]'>
-           
-        {Object.keys(colorMapping1).map((label) => (
-        <Checkbox
-          key={label}
-          checked={checkedLabels.includes(label)}
-              onChange={() => handleCheckboxChange(label)}
-          icon={
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                backgroundColor: colorMapping1[label],
-                alignSelf: "stretch",
-              }}
-            >
-              <Icon.FiCheck color="white" size={20} />
-            </div>
-          }
-          borderColor={colorMapping1[label]}
-          borderRadius={20}
-          style={{ overflow: "hidden", margin: '10px' }} // Added margin for spacing between checkboxes
-          size={20}
-          label={`${label}`}
-        />
-      ))}
-                
-      
+            </select>
+          </div>
         </div>
-        <div className='flex gap-[40px]'>
-        {Object.keys(colorMapping2).map((label) => (
-        <Checkbox
-          key={label}
-          checked={checkedLabels.includes(label)}
-              onChange={() => handleCheckboxChange(label)}
-          icon={
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                backgroundColor: colorMapping2[label],
-                alignSelf: "stretch",
-              }}
-            >
-              <Icon.FiCheck color="white" size={20} />
-            </div>
-          }
-          borderColor={colorMapping2[label]}
-          borderRadius={20}
-          style={{ overflow: "hidden", margin: '10px' }} // Added margin for spacing between checkboxes
-          size={20}
-          label={`${label}`}
-        />
-        ))}
+        <div className='flex flex-col'>
+          <div>Root Instances</div>
+          <div className='flex lg:flex-col justify-between'>
+          <div className='flex flex-col lg:flex-row gap-2'>
+            {/* ColorMapping1 checkboxes */}
+            {Object.keys(colorMapping1).map((label) => (
+              <Checkbox
+                key={label}
+                checked={checkedLabels.includes(label)}
+                onChange={() => handleCheckboxChange(label)}
+                icon={
+                  <div
+                    style={{
+                      display: 'flex',
+                      flex: 1,
+                      backgroundColor: colorMapping1[label],
+                      alignSelf: 'stretch',
+                    }}
+                  >
+                    <Icon.FiCheck color='white' size={20} />
+                  </div>
+                }
+                borderColor={colorMapping1[label]}
+                borderRadius={20}
+                style={{ overflow: 'hidden', margin: '10px' }}
+                size={20}
+                label={`${label}`}
+              />
+            ))}
+          </div>
+          <div className='flex flex-col lg:flex-row gap-2'>
+            {/* ColorMapping2 checkboxes */}
+            {Object.keys(colorMapping2).map((label) => (
+              <Checkbox
+                key={label}
+                checked={checkedLabels.includes(label)}
+                onChange={() => handleCheckboxChange(label)}
+                icon={
+                  <div
+                    style={{
+                      display: 'flex',
+                      flex: 1,
+                      backgroundColor: colorMapping2[label],
+                      alignSelf: 'stretch',
+                    }}
+                  >
+                    <Icon.FiCheck color='white' size={20} />
+                  </div>
+                }
+                borderColor={colorMapping2[label]}
+                borderRadius={20}
+                style={{ overflow: 'hidden', margin: '10px' }}
+                size={20}
+                label={`${label}`}
+              />
+            ))}
+          </div>
+          </div>
         </div>
-    </div>
-    </div>
-    
-
-  
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Legend
+export default Legend;
