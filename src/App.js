@@ -345,7 +345,7 @@ const App = () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            const response = await axios.get(`/root/${fileName}/json/`);
+            const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
             return response.data;
           })
         );
