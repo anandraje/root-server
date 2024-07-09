@@ -2023,7 +2023,7 @@ const App = () => {
   onChange={(selectedOption) => handleCountrySelectionForTable(selectedOption[0])}
   value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
   placeholder="Select Country"
-  searchable={false}
+  searchable={true}
 />
                 </div>
               </div>
