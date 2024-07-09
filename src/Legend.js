@@ -23,7 +23,8 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     All: '#700000',  // Dark Red
   };
 
-  const [checkedLabels, setCheckedLabels] = useState([]);
+  
+  const [checkedLabels, setCheckedLabels] = useState(['All']);
 
   const handleCheckboxChange = (label) => {
     if (label === 'All') {

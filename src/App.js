@@ -1198,7 +1198,7 @@ const App = () => {
       { code: "ZM", name: "Zambia" },
       { code: "ZW", name: "Zimbabwe" },
     ],
-    North_America: [
+    "North America": [
       { code: "CA", name: "Canada" },
       { code: "SV", name: "El Salvador" },
       { code: "US", name: "United States" },
@@ -1240,7 +1240,7 @@ const App = () => {
       { code: "PM", name: "Saint Pierre and Miquelon" },
       { code: "MS", name: "Montserrat" },
     ],
-    South_America: [
+    "South America": [
       { code: "AR", name: "Argentina" },
       { code: "BR", name: "Brazil" },
       { code: "CL", name: "Chile" },
