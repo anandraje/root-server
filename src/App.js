@@ -1776,12 +1776,13 @@ const App = () => {
  
   const handleCountrySelectionForTable = (selectedOption) => {
 
-    console.log(selectedOption.value)
+   
     if (selectedOption && selectedOption.value) {
       setSelectedCountry2(selectedOption ? selectedOption.value : null);
-      console.log(selectedOption.value);
+     
     } else {
       // Handle the case where selectedOption is null or undefined
+      setSelectedCountry2("");
       console.log('No country selected');
     }
   };
@@ -1951,12 +1952,10 @@ const App = () => {
    <Select
   options={countryOptions}
   onChange={(selectedOption) => {
-    if (selectedOption && selectedOption.length > 0) {
+    if (selectedOption) {
       handleCountrySelectionForTable(selectedOption[0]);
-  
     } else {
-
-       // Handle null case as needed
+      handleCountrySelectionForTable(null); // Handle null case
     }
   }}
   value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
