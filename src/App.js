@@ -1475,21 +1475,15 @@ const App = () => {
   );
   console.log(markers);
   const filteredMarkersForTable =
-  values.length === 0
+  values.length === 0 || values.includes("All")
     ? markers.filter(marker => selectedCountry2 === "" || marker.country === selectedCountry2)
     : markers.filter(
         marker =>
           values.includes(marker.rootInstanceName) &&
           (selectedCountry2 === "" || marker.country === selectedCountry2)
       );
-  // const markerTable2 = {};
-  // filteredMarkersForTable.forEach((marker) => {
-  //   if (!markerTable2[marker.country]) {
-  //     markerTable2[marker.country] = marker;
-  //   }
-  // });
 
-  // const uniqueCountryMarkers = Object.values(markerTable2);
+
 
   const getCountByCountry = () => {
     const count = filteredMarkersForTable.reduce((acc, marker) => {
@@ -1709,7 +1703,7 @@ const App = () => {
   getCountByCountry();
   console.log("hii", filteredMarkersForTable);
   const options = [
- 
+    { value: "All", label: "All" },
     { value: "A", label: "A" },
     { value: "B", label: "B" },
     { value: "C", label: "C" },
@@ -1723,6 +1717,7 @@ const App = () => {
     { value: "K", label: "K" },
     { value: "L", label: "L" },
     { value: "M", label: "M" },
+  
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -1783,78 +1778,6 @@ const App = () => {
     setSelectedCountry2(selectedOption ? selectedOption.value : null);
     console.log(selectedOption.value)
   };
-  // const [currentPage_2, setCurrentPage_2] = useState(1);
-  // const rowsPerPage_2 = 5;
-  // const maxPageNumbersToShow_2 = 5;
-
-  // // Calculate the indexes of the first and last items on the current page
-  // const indexOfLastItem_2 = currentPage_2 * rowsPerPage_2;
-  // const indexOfFirstItem_2 = indexOfLastItem_2 - rowsPerPage_2;
-  // const [sortConfig2, setSortConfig2] = useState({ key: null, direction: "↑" });
-
-  // const sortedMarkers2 = useMemo(() => {
-  //   let sortableItems = [...uniqueCountryMarkers];
-  //   if (sortConfig2.key !== null) {
-  //     sortableItems.sort((a, b) => {
-  //       if (sortConfig2.key === "Sites") {
-  //         const aCount = getCountByCountry()[a.country]?.count || 0;
-  //         const bCount = getCountByCountry()[b.country]?.count || 0;
-  //         return sortConfig2.direction === "↑"
-  //           ? aCount - bCount
-  //           : bCount - aCount;
-  //       }
-  //       if (sortConfig2.key === "Instances") {
-  //         const aInstances = getCountByCountry()[a.country]?.instances || 0;
-  //         const bInstances = getCountByCountry()[b.country]?.instances || 0;
-  //         return sortConfig2.direction === "↑"
-  //           ? aInstances - bInstances
-  //           : bInstances - aInstances;
-  //       }
-  //       if (a[sortConfig2.key] < b[sortConfig2.key]) {
-  //         return sortConfig2.direction === "↑" ? -1 : 1;
-  //       }
-  //       if (a[sortConfig2.key] > b[sortConfig2.key]) {
-  //         return sortConfig2.direction === "↑" ? 1 : -1;
-  //       }
-  //       return 0;
-  //     });
-  //   }
-  //   return sortableItems;
-  // }, [uniqueCountryMarkers, sortConfig2]);
-
-  // const requestSort2 = (key) => {
-  //   let direction = "↑";
-  //   if (sortConfig2.key === key && sortConfig2.direction === "↑") {
-  //     direction = "↓";
-  //   }
-  //   setSortConfig2({ key, direction });
-  // };
-
-  // const getClassNamesFor2 = (key) => {
-  //   if (!sortConfig2) {
-  //     return;
-  //   }
-  //   return sortConfig2.key === key ? sortConfig2.direction : undefined;
-  // };
-  // const currentItems_2 = sortedMarkers2.slice(
-  //   indexOfFirstItem_2,
-  //   indexOfLastItem_2
-  // );
-
-  // // Get total pages
-  // const totalPages_2 = Math.ceil(uniqueCountryMarkers.length / rowsPerPage_2);
-
-  // // Calculate the range of page numbers to show_2
-  // const startPage_2 = Math.max(
-  //   1,
-  //   currentPage_2 - Math.floor(maxPageNumbersToShow_2 / 2)
-  // );
-  // const endPage_2 = Math.min(
-  //   totalPages_2,
-  //   startPage_2 + maxPageNumbersToShow_2 - 1
-  // );
-
-  // const paginate_2 = (pageNumber) => setCurrentPage_2(pageNumber);
 
   return (
     <>
