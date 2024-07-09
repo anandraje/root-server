@@ -977,7 +977,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Select from "react-dropdown-select";
 import Piechart from "./Pie.js";
 import regions from "./Regions.js";
-import IndiaTable from "./India.js";
+
 const jsonFiles = [
   "A",
   "B",
@@ -1775,8 +1775,15 @@ const App = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
  
   const handleCountrySelectionForTable = (selectedOption) => {
-    setSelectedCountry2(selectedOption ? selectedOption.value : null);
+
     console.log(selectedOption.value)
+    if (selectedOption && selectedOption.value) {
+      setSelectedCountry2(selectedOption ? selectedOption.value : null);
+      console.log(selectedOption.value);
+    } else {
+      // Handle the case where selectedOption is null or undefined
+      console.log('No country selected');
+    }
   };
 
   return (
@@ -1941,13 +1948,23 @@ const App = () => {
                     placeholder={"Roots"}
                     dropdownGap={0}
                   />
-               <Select
+   <Select
   options={countryOptions}
-  onChange={(selectedOption) => handleCountrySelectionForTable(selectedOption[0])}
+  onChange={(selectedOption) => {
+    if (selectedOption && selectedOption.length > 0) {
+      handleCountrySelectionForTable(selectedOption[0]);
+  
+    } else {
+
+       // Handle null case as needed
+    }
+  }}
   value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
   placeholder="Select Country"
   searchable={true}
 />
+
+
                 </div>
               </div>
             </div>
@@ -2075,7 +2092,7 @@ const App = () => {
                 Asia Instances
               </div>
               <Pie_Asia data={aggregatedDataAsia} />
-              {/* <IndiaTable data={markers} /> */}
+            
             </div>
           </div>
         </div>
