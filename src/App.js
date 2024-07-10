@@ -833,7 +833,7 @@ const App = () => {
       <div className="flex flex-col bg-gray-200">
         {/* Header Section */}
         <div className="font-bold text-3xl text-center p-4 bg-gray-200">
-          Global DNS root servers visualizer
+          Global DNS Root Servers Visualizer
         </div>
 
         {/* Main Content Section */}
@@ -1007,7 +1007,7 @@ const App = () => {
                       setCurrentPage(1); // Reset pagination for table 1
                       // setCurrentPage_2(1); // Reset pagination for table 2
                     }}
-                    style={{ width: "", backgroundColor: "white", color: "black" }}
+                    style={{ width: "15rem", backgroundColor: "white", color: "black" }}
                     searchable={false}
                     placeholder={"Roots"}
                     dropdownGap={0}
@@ -1022,7 +1022,7 @@ const App = () => {
     }
   }}
   value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
-  style={{ width: "", backgroundColor: "white", color: "black" }}
+  style={{ width: "15rem", backgroundColor: "white", color: "black" }}
   placeholder="Select Country"
   searchable={true}
 />
