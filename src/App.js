@@ -831,130 +831,132 @@ const App = () => {
 
   return (
     <>
-      <div className="flex flex-col bg-gray-200">
-        {/* Header Section */}
-        <div className="font-bold text-3xl text-center p-4 bg-gray-200">
-          Global DNS Root Servers Visualizer
-        </div>
-
-        {/* Main Content Section */}
-        <div className="flex lg:flex-row flex-col gap-5">
-          {/* Sidebar Filters */}
-          
-          
-
- {/* Main Content Area */}
-<div className="flex-1 relative">
-  {/* Map Section */}
-  <div className="w-full h-[80vh] bg-gray-100 flex">
-    <MapContainer
-      center={[51.505, -0.09]}
-      zoom={2}
-      className="w-4/5 h-full"
-      ref={mapRef}
-      minZoom={2}
-      maxZoom={10}
-      worldCopyJump={true}
-      maxBounds={bounds}
-      maxBoundsViscosity={1.0}
-    >
-      <TileLayer
-        url="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=gAqMvillSWIbJwin1cPn"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <MarkerClusterGroup
-        showCoverageOnHover={false}
-        zoomToBoundsOnClick={true}
-        spiderfyOnMaxZoom={true}
-      >
-        {filteredMarkers.map((marker) => (
-          (!selectedCountry ||
-            marker.country === selectedCountry ||
-            selectedCountry === "All") &&
-          (checkedLabels.length === 0 ||
-            checkedLabels.includes(marker.rootInstanceName)) && (
-              <Marker
-                key={marker.ID}
-                position={[marker.Latitude, marker.Longitude]}
-                icon={createCustomIcon(
-                  colorMapping[marker.rootInstanceName],
-                  marker.rootInstanceName
-                )}
-              >
-                <Popup>
-                  <div className="border border-gray-400 p-2">
-                    <div className="font-bold bg-gray-100 p-2">
-                      {marker.name}, {marker.country}
-                    </div>
-                    <div className="flex items-center p-2">
-                      <div className="font-bold w-24">Operator</div>
-                      <div className="text-sm">{marker.Operator}</div>
-                    </div>
-                    <div className="flex bg-gray-100 items-center p-2">
-                      <div className="w-24 font-bold">IPv4</div>
-                      <div>{marker.IPv4}</div>
-                    </div>
-                    <div className="flex items-center p-2">
-                      <div className="w-24 font-bold">IPv6</div>
-                      <div>{marker.IPv6}</div>
-                    </div>
-                    <div className="flex bg-gray-100 items-center p-2">
-                      <div className="w-24 font-bold">ASN</div>
-                      <div>{marker.ASN}</div>
-                    </div>
-                    {marker.Instances !== 1 && (
-                      <div className="flex items-center p-2">
-                        <div className="font-bold w-24">Instances</div>
-                        <div>{marker.Instances}</div>
-                      </div>
-                    )}
-                  </div>
-                </Popup>
-              </Marker>
-            )
-        ))}
-      </MarkerClusterGroup>
-    </MapContainer>
-
-    <div className="w-2/5 h-[80vh] p-2 bg-white">
-      <div className="bg-white rounded-lg shadow-lg p-2 w-full h-full flex flex-col overflow-y-auto">
-        <Legend
-          countrycode={handleCountrySelection}
-          sendCheckedLabels={handleCheckedLabels}
-          continentselected={handleContinentSelection}
-        />
-        <table className="table-auto w-full h-full">
-          <thead>
-            <tr className="bg-gray-200 text-center">
-              <th className="px-1 py-1 text-xs">Root Instance</th>
-              <th className="px-1 py-1 text-xs">Sites</th>
-              <th className="px-1 py-1 text-xs">Instances</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(colorMapping).map((label, index) => (
-              <tr key={label} className={index % 2 === 0 ? 'bg-gray-100 text-center' : 'bg-gray-50 text-center'}>
-                <td className="px-1 py-0 text-xs">{label}</td>
-                <td className="px-1 py-0 text-xs">{siteCounts[label] || 0}</td>
-                <td className="px-1 py-0 text-xs">{counts[label] || 0}</td>
-              </tr>
-            ))}
-            <tr className="bg-gray-200 text-center">
-              <td className="px-1 py-1 text-xs">Total</td>
-              <td className="px-1 py-1 text-xs">{totalCount_site}</td>
-              <td className="px-1 py-1 text-xs">{totalCount}</td>
-            </tr>
-          </tbody>
-        </table>
-        <button
-          onClick={downloadCSV}
-          className="mt-2 p-2 bg-blue-500 text-white rounded text-xs"
-        >
-          Download CSV
-        </button>
+      <div className="flex flex-col bg-gray-200 min-h-screen">
+      {/* Header Section */}
+      <div className="font-bold text-3xl text-center p-4 bg-gray-200">
+        Global DNS Root Servers Visualizer
       </div>
-    </div>
-  </div>
+
+      {/* Main Content Section */}
+      <div className="flex flex-col lg:flex-row gap-5 flex-1">
+        {/* Sidebar Filters */}
+        
+        {/* Main Content Area */}
+        <div className="flex-1 relative">
+          {/* Map Section */}
+          <div className="w-full h-[120vh] lg:h-[80vh] bg-gray-100  flex flex-col lg:flex-row items-center">
+            <div className="  h-full w-full lg:w-4/5 p-2">
+              <MapContainer
+                center={[51.505, -0.09]}
+                zoom={2}
+                className="w-full h-full"
+                ref={mapRef}
+                minZoom={2}
+                maxZoom={10}
+                worldCopyJump={true}
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
+              >
+                <TileLayer
+                  url="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=gAqMvillSWIbJwin1cPn"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <MarkerClusterGroup
+                  showCoverageOnHover={false}
+                  zoomToBoundsOnClick={true}
+                  spiderfyOnMaxZoom={true}
+                >
+                  {filteredMarkers.map((marker) => (
+                    (!selectedCountry ||
+                      marker.country === selectedCountry ||
+                      selectedCountry === "All") &&
+                    (checkedLabels.length === 0 ||
+                      checkedLabels.includes(marker.rootInstanceName)) && (
+                        <Marker
+                          key={marker.ID}
+                          position={[marker.Latitude, marker.Longitude]}
+                          icon={createCustomIcon(
+                            colorMapping[marker.rootInstanceName],
+                            marker.rootInstanceName
+                          )}
+                        >
+                          <Popup>
+                            <div className="border border-gray-400 p-2">
+                              <div className="font-bold bg-gray-100 p-2">
+                                {marker.name}, {marker.country}
+                              </div>
+                              <div className="flex items-center p-2">
+                                <div className="font-bold w-24">Operator</div>
+                                <div className="text-sm">{marker.Operator}</div>
+                              </div>
+                              <div className="flex bg-gray-100 items-center p-2">
+                                <div className="w-24 font-bold">IPv4</div>
+                                <div>{marker.IPv4}</div>
+                              </div>
+                              <div className="flex items-center p-2">
+                                <div className="w-24 font-bold">IPv6</div>
+                                <div>{marker.IPv6}</div>
+                              </div>
+                              <div className="flex bg-gray-100 items-center p-2">
+                                <div className="w-24 font-bold">ASN</div>
+                                <div>{marker.ASN}</div>
+                              </div>
+                              {marker.Instances !== 1 && (
+                                <div className="flex items-center p-2">
+                                  <div className="font-bold w-24">Instances</div>
+                                  <div>{marker.Instances}</div>
+                                </div>
+                              )}
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                  ))}
+                </MarkerClusterGroup>
+              </MapContainer>
+            </div>
+
+            <div className="  bg-white h-full w-full lg:w-2/5 p-2">
+              <div className="bg-white rounded-lg shadow-lg p-2 w-full h-full flex flex-col overflow-y-auto">
+                <Legend
+                  countrycode={handleCountrySelection}
+                  sendCheckedLabels={handleCheckedLabels}
+                  continentselected={handleContinentSelection}
+                />
+                <table className="table-auto w-full h-full">
+                  <thead>
+                    <tr className="bg-gray-200 text-center">
+                      <th className="px-1 py-1 text-xs">Root Instance</th>
+                      <th className="px-1 py-1 text-xs">Sites</th>
+                      <th className="px-1 py-1 text-xs">Instances</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(colorMapping).map((label, index) => (
+                      <tr key={label} className={index % 2 === 0 ? 'bg-gray-100 text-center' : 'bg-gray-50 text-center'}>
+                        <td className="px-1 py-0 text-xs">{label}</td>
+                        <td className="px-1 py-0 text-xs">{siteCounts[label] || 0}</td>
+                        <td className="px-1 py-0 text-xs">{counts[label] || 0}</td>
+                      </tr>
+                    ))}
+                    <tr className="bg-gray-200 text-center">
+                      <td className="px-1 py-1 text-xs">Total</td>
+                      <td className="px-1 py-1 text-xs">{totalCount_site}</td>
+                      <td className="px-1 py-1 text-xs">{totalCount}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button
+                  onClick={downloadCSV}
+                  className="mt-2 p-2 bg-blue-500 text-white rounded text-xs"
+                >
+                  Download CSV
+                </button>
+              </div>
+            </div>
+          </div>
+      
+      
 
 
 
