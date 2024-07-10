@@ -61,32 +61,28 @@ const PieChartComponent = ({ dataKey, data }) => {
       </text>
     );
   };
-
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <PieChart>
         <Pie
           data={chartData}
-          cx="50%"
-          cy="50%"
+          labelLine={false}
           label={renderCustomizedLabel}
-          outerRadius={80}
+          outerRadius={120}
           fill="#8884d8"
           dataKey="value"
-          labelLine={false}
         >
           {chartData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
         <Tooltip />
-        <Legend verticalAlign="top" height={36} />
+        <Legend />
       </PieChart>
     </ResponsiveContainer>
   );
 };
 
-// App Component
 const Pie_Asia = ({ data }) => {
   const [selectedKey, setSelectedKey] = useState('');
 
@@ -113,7 +109,7 @@ const Pie_Asia = ({ data }) => {
         </select>
       </div>
       <div className="flex justify-center">
-        <div className="w-full lg:w-1/2 p-4 cursor-pointer">
+        <div className="w-full p-4 cursor-pointer">
           <h3 className="text-center">
             {selectedKey ? `Roots ${selectedKey}` : 'All Roots'}
           </h3>
@@ -123,5 +119,6 @@ const Pie_Asia = ({ data }) => {
     </div>
   );
 };
+
 
 export default Pie_Asia;

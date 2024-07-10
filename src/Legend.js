@@ -283,9 +283,9 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     { value: 'Europe', label: 'Europe' },
   ];
   return (
-    <div className='bg-white rounded-lg shadow-md p-4'>
-      <div className='mb-4'>
-        <div className='text-lg font-semibold mb-2'>Continent</div>
+    <div className='bg-white  shadow-md p-2 '>
+      <div className='mb-2'>
+        <div className='text-md font-semibold mb-2'>Continent</div>
         <Select
       options={options}
       onChange={(selectedOption) => {
@@ -297,11 +297,11 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
            // Handle null case as needed
         }
       }}
-      className='w-full py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
+      className='w-full py-1 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
     />
       </div>
       <div>
-        <div className='text-lg font-semibold mb-2'>Country</div>
+        <div className='text-md font-semibold mb-2'>Country</div>
  
          <Select
       options={countries}
@@ -315,12 +315,12 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
            // Handle null case as needed
         }
       }}
-      className='w-full py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
+      className='w-full py-1 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
     />
       </div>
-      <div className='mt-4'>
-        <div className='text-lg font-semibold mb-2'>Root Instances</div>
-        <div className='flex flex-wrap gap-2'>
+      <div className='mt-2'>
+        <div className='text-md font-semibold mb-2'>Root Instances</div>
+        <div className='flex flex-wrap gap-1'>
           {/* ColorMapping1 checkboxes */}
           {Object.keys(colorMapping1).map((label) => (
             <Checkbox
@@ -332,12 +332,12 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
                   className='flex items-center justify-center'
                   style={{
                     backgroundColor: colorMapping1[label],
-                    width: '24px',
-                    height: '24px',
+                    width: '22px',
+                    height: '22px',
                   }}
                 >
                   {checkedLabels.includes(label) && (
-                    <Icon.FiCheck color='white' size={18} />
+                    <Icon.FiCheck color='white' size={16} />
                   )}
                 </div>
               }
@@ -359,12 +359,12 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
                   className='flex items-center justify-center'
                   style={{
                     backgroundColor: colorMapping2[label],
-                    width: '24px',
-                    height: '24px',
+                    width: '22px',
+                    height: '22px',
                   }}
                 >
                   {checkedLabels.includes(label) && (
-                    <Icon.FiCheck color='white' size={18} />
+                    <Icon.FiCheck color='white' size={16} />
                   )}
                 </div>
               }
