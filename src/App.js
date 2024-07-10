@@ -827,7 +827,7 @@ const App = () => {
       console.log('No country selected');
     }
   };
-
+  console.log(currentItems)
   return (
     <>
       <div className="flex flex-col bg-gray-200">
@@ -986,7 +986,17 @@ const App = () => {
 
           
   
-                <div className="mt-4 ">
+               
+
+            {/* Tables Section */}
+            <div className="mt-2">
+              {/* Table 2 - Main Data Table */}
+              <div className="mt-2 bg-slate-100 rounded-lg shadow-lg p-4 overflow-x-auto">
+              <div className="">
+          <div className="my-2 text-2xl text-center">
+            Root Server Deployment by City
+          </div>
+          <div className=" flex justify-center my-2 ">
                   
                   <Select
                     options={options}
@@ -997,7 +1007,7 @@ const App = () => {
                       setCurrentPage(1); // Reset pagination for table 1
                       // setCurrentPage_2(1); // Reset pagination for table 2
                     }}
-                    style={{ width: "20%", backgroundColor: "white", color: "black" }}
+                    style={{ width: "", backgroundColor: "white", color: "black" }}
                     searchable={false}
                     placeholder={"Roots"}
                     dropdownGap={0}
@@ -1012,7 +1022,7 @@ const App = () => {
     }
   }}
   value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
-  style={{ width: "20%", backgroundColor: "white", color: "black" }}
+  style={{ width: "", backgroundColor: "white", color: "black" }}
   placeholder="Select Country"
   searchable={true}
 />
@@ -1021,20 +1031,6 @@ const App = () => {
             
              
             </div>
-
-            {/* Tables Section */}
-            <div className="mt-4">
-              {/* Table 2 - Main Data Table */}
-              <div className="mt-4 bg-slate-100 rounded-lg shadow-lg p-4 overflow-x-auto">
-              <div className="text-center">
-          <div className="my-4 text-2xl">
-            Root Server Deployment by City
-          </div>
-          <div className="flex justify-center">
-            {values != "All" && values != "" && (
-              <div className="mr-2 mt-2">Root: {values}</div>
-            )}
-          </div>
         </div>
 
 
@@ -1042,6 +1038,12 @@ const App = () => {
   <table className="table-auto w-full text-center">
                   <thead>
                     <tr className="bg-gray-200">
+                    {(values == "All" || values == ""  )&& (<th
+                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")} w-1/5`}
+                        onClick={() => requestSort("Instances")}
+                      >
+                        Root Instance {sortConfig.key === 'Instances' ? sortConfig.direction : '↑↓'}
+                      </th>)}
                       <th
                         className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")} w-1/5`}
                         onClick={() => requestSort("name")}
@@ -1072,16 +1074,19 @@ const App = () => {
                       >
                         Instances {sortConfig.key === 'Instances' ? sortConfig.direction : '↑↓'}
                       </th>
+                      
                     </tr>
                   </thead>
                   <tbody>
                     {currentItems.map((marker, index) => (
                       <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
+                        {(values == "All" || values == ""  )&& (<td className="px-4 py-2 w-1/5">{marker.rootInstanceName}</td>)}
                         <td className="px-4 py-2 w-1/5">{marker.name}</td>
                         <td className="px-4 py-2 w-1/5">{findCountryNameByCode(marker.country)}</td>
                         <td className="px-4 py-2 w-1/5">{marker.type}</td>
                         <td className="px-4 py-2 w-1/5">{marker.ipv6 ? "Yes" : "No"}</td>
                         <td className="px-4 py-2 w-1/5">{marker.Instances}</td>
+               
                       </tr>
                     ))}
                   </tbody>
