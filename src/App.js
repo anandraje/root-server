@@ -828,6 +828,7 @@ const App = () => {
     }
   };
   console.log(currentItems)
+
   return (
     <>
       <div className="flex flex-col bg-gray-200">
@@ -849,7 +850,7 @@ const App = () => {
     <MapContainer
       center={[51.505, -0.09]}
       zoom={2}
-      className="w-3/5 h-full"
+      className="w-4/5 h-full"
       ref={mapRef}
       minZoom={2}
       maxZoom={10}
@@ -965,24 +966,22 @@ const App = () => {
             </div>
             
               {/* Left Side - Charts */}
-              <div className="w-full flex flex-row items-center">
-                {/* Pie Chart Component */}
-                <div className="w-full">
-                               <div className="font-bold text-2xl text-center p-3 ">
-               World Instances
-             </div>
-                <Piechart data={aggregatedData} />
-                </div>
-                <div className="w-full">
-             
-             <div className="font-bold text-2xl text-center p-3 ">
-               Asia Instances
-             </div>
-             <Pie_Asia data={aggregatedDataAsia} />
-           
-           </div>
+              <div className="w-full flex flex-col lg:flex-row items-center">
+  {/* Pie Chart Component */}
+  <div className="w-full lg:w-1/2 p-2">
+    <div className="font-bold text-2xl text-center p-3">
+      World Instances
+    </div>
+    <Piechart data={aggregatedData} />
+  </div>
+  <div className="w-full lg:w-1/2 p-2">
+    <div className="font-bold text-2xl text-center p-3">
+      Asia Instances
+    </div>
+    <Pie_Asia data={aggregatedDataAsia} />
+  </div>
+</div>
 
-              </div>
 
           
   
@@ -990,181 +989,128 @@ const App = () => {
 
             {/* Tables Section */}
             <div className="mt-2">
-              {/* Table 2 - Main Data Table */}
-              <div className="mt-2 bg-slate-100 rounded-lg shadow-lg p-4 overflow-x-auto">
-              <div className="">
-          <div className="my-2 text-2xl text-center">
-            Root Server Deployment by City
-          </div>
-          <div className=" flex justify-center my-2 ">
-                  
-                  <Select
-                    options={options}
-                    labelField="label"
-                    valueField="value"
-                    onChange={(values) => {
-                      setvalues(values.map((v) => v.value));
-                      setCurrentPage(1); // Reset pagination for table 1
-                      // setCurrentPage_2(1); // Reset pagination for table 2
-                    }}
-                    style={{ width: "15rem", backgroundColor: "white", color: "black" }}
-                    searchable={false}
-                    placeholder={"Roots"}
-                    dropdownGap={0}
-                  />
-   <Select
-  options={countryOptions}
-  onChange={(selectedOption) => {
-    if (selectedOption) {
-      handleCountrySelectionForTable(selectedOption[0]);
-    } else {
-      handleCountrySelectionForTable(null); // Handle null case
-    }
-  }}
-  value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
-  style={{ width: "15rem", backgroundColor: "white", color: "black" }}
-  placeholder="Select Country"
-  searchable={true}
-/>
+  {/* Table 2 - Main Data Table */}
+  <div className="mt-2 bg-slate-100 rounded-lg shadow-lg p-4 overflow-x-auto">
+    <div className="">
+      <div className="my-2 text-2xl text-center">
+        Root Server Deployment by City
+      </div>
+      <div className="flex flex-col md:flex-row justify-center my-2 space-y-2 md:space-y-0 md:space-x-4">
+        <Select
+          options={options}
+          labelField="label"
+          valueField="value"
+          onChange={(values) => {
+            setvalues(values.map((v) => v.value));
+            setCurrentPage(1); // Reset pagination for table 1
+          }}
+          style={{ width: "15rem", backgroundColor: "white", color: "black" }}
+          searchable={false}
+          placeholder={"Roots"}
+          dropdownGap={0}
+        />
+        <Select
+          options={countryOptions}
+          onChange={(selectedOption) => {
+            if (selectedOption) {
+              handleCountrySelectionForTable(selectedOption[0]);
+            } else {
+              handleCountrySelectionForTable(null); // Handle null case
+            }
+          }}
+          value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
+          style={{ width: "15rem", backgroundColor: "white", color: "black" }}
+          placeholder="Select Country"
+          searchable={true}
+        />
+      </div>
+    </div>
 
-
-            
-             
-            </div>
-        </div>
-
-
-
-  <table className="table-auto w-full text-center">
-                  <thead>
-                    <tr className="bg-gray-200">
-                    {(values == "All" || values == ""  )&& (<th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")} w-1/5`}
-                        onClick={() => requestSort("Instances")}
-                      >
-                        Root Instance {sortConfig.key === 'Instances' ? sortConfig.direction : '↑↓'}
-                      </th>)}
-                      <th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")} w-1/5`}
-                        onClick={() => requestSort("name")}
-                      >
-                        City {sortConfig.key === 'name' ? sortConfig.direction : '↑↓'}
-                      </th>
-                      <th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Country")} w-1/5`}
-                        onClick={() => requestSort("Country")}
-                      >
-                        Country {sortConfig.key === 'Country' ? sortConfig.direction : '↑↓'}
-                      </th>
-                      <th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("type")} w-1/5`}
-                        onClick={() => requestSort("type")}
-                      >
-                        Type {sortConfig.key === 'type' ? sortConfig.direction : '↑↓'}
-                      </th>
-                      <th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("ipv6")} w-1/5`}
-                        onClick={() => requestSort("ipv6")}
-                      >
-                        IPv6 Enabled {sortConfig.key === 'ipv6' ? sortConfig.direction : '↑↓'}
-                      </th>
-                      <th
-                        className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")} w-1/5`}
-                        onClick={() => requestSort("Instances")}
-                      >
-                        Instances {sortConfig.key === 'Instances' ? sortConfig.direction : '↑↓'}
-                      </th>
-                      
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentItems.map((marker, index) => (
-                      <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
-                        {(values == "All" || values == ""  )&& (<td className="px-4 py-2 w-1/5">{marker.rootInstanceName}</td>)}
-                        <td className="px-4 py-2 w-1/5">{marker.name}</td>
-                        <td className="px-4 py-2 w-1/5">{findCountryNameByCode(marker.country)}</td>
-                        <td className="px-4 py-2 w-1/5">{marker.type}</td>
-                        <td className="px-4 py-2 w-1/5">{marker.ipv6 ? "Yes" : "No"}</td>
-                        <td className="px-4 py-2 w-1/5">{marker.Instances}</td>
-               
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {/* Pagination */}
-                <nav className="py-2">
-                  <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''} hover:cursor-pointer`}>
-                      <li className="page-link" aria-label="Previous" onClick={() => paginate(currentPage - 1)}>
-                        <span aria-hidden="true">&laquo;</span>
-                        <span className="sr-only">Previous</span>
-                      </li>
-                    </li>
-                    {[...Array(endPage - startPage + 1).keys()].map((i) => (
-                      <li key={i + startPage} className={`page-item ${currentPage === i + startPage ? 'active' : ''} hover:cursor-pointer`}>
-                        <li onClick={() => paginate(i + startPage)} className="page-link">
-                          {i + startPage}
-                        </li>
-                      </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''} hover:cursor-pointer`}>
-                      <li className="page-link" aria-label="Next" onClick={() => paginate(currentPage + 1)}>
-                        <span aria-hidden="true">&raquo;</span>
-                        <span className="sr-only">Next</span>
-                      </li>
-                    </li>
-                  </ul>
-                </nav>
-              
-              </div>
-
-              {/* Table 3 - Additional Data Table */}
-              {/* <div className="mt-4 bg-white rounded-lg shadow-lg p-4 overflow-x-auto">
-  <table className="table-auto w-full text-center">
-    <thead>
-      <tr className="bg-gray-200">
-        <th
-          className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Country')}`}
-          onClick={() => requestSort2('Country')}
-        >
-          Country {sortConfig2.key === 'Country' ? '↑↓' : '↑↓'}
-        </th>
-        <th
-          className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Sites')}`}
-          onClick={() => requestSort2('Sites')}
-        >
-          Sites {sortConfig2.key === 'Sites' ? '↑↓' : '↑↓'}
-        </th>
-        <th
-          className={`px-4 py-2 cursor-pointer ${getClassNamesFor2('Instances')}`}
-          onClick={() => requestSort2('Instances')}
-        >
-          Instances {sortConfig2.key === 'Instances' ? '↑↓' : '↑↓'}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {currentItems_2.map((marker, index) => (
-        <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
-          <td className="px-4 py-2">{findCountryNameByCode(marker.country)}</td>
-          <td className="px-4 py-2">{getCountByCountry()[marker.country]?.count}</td>
-          <td className="px-4 py-2">{getCountByCountry()[marker.country]?.instances || 0}</td>
+    <table className="table-auto w-full text-center">
+      <thead>
+        <tr className="bg-gray-200">
+          {(values == "All" || values == "") && (
+            <th
+              className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Instances")} w-1/5`}
+              onClick={() => requestSort("Instances")}
+            >
+              Root Instance {sortConfig.key === 'Instances' ? sortConfig.direction : '↑↓'}
+            </th>
+          )}
+          <th
+            className={`px-4 py-2 cursor-pointer ${getClassNamesFor("name")} w-1/5`}
+            onClick={() => requestSort("name")}
+          >
+            City {sortConfig.key === 'name' ? sortConfig.direction : '↑↓'}
+          </th>
+          <th
+            className={`px-4 py-2 cursor-pointer ${getClassNamesFor("Country")} w-1/5`}
+            onClick={() => requestSort("Country")}
+          >
+            Country {sortConfig.key === 'Country' ? sortConfig.direction : '↑↓'}
+          </th>
+          <th
+            className={`px-4 py-2 cursor-pointer ${getClassNamesFor("type")} w-1/5`}
+            onClick={() => requestSort("type")}
+          >
+            Type {sortConfig.key === 'type' ? sortConfig.direction : '↑↓'}
+          </th>
+          <th
+            className={`px-4 py-2 cursor-pointer ${getClassNamesFor("ipv6")} w-1/5`}
+            onClick={() => requestSort("ipv6")}
+          >
+            IPv6 Enabled {sortConfig.key === 'ipv6' ? sortConfig.direction : '↑↓'}
+          </th>
+          <th
+            className={`px-4 py-2 cursor-pointer ${getClassNamesFor("rootInstanceName")} w-1/5`}
+            onClick={() => requestSort("rootInstanceName")}
+          >
+            Instances {sortConfig.key === 'rootInstanceName' ? sortConfig.direction : '↑↓'}
+          </th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-</div> */}
+      </thead>
+      <tbody>
+        {currentItems.map((marker, index) => (
+          <tr key={marker.ID} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-50'}>
+            {(values == "All" || values == "") && <td className="px-4 py-2 w-1/5">{marker.rootInstanceName}</td>}
+            <td className="px-4 py-2 w-1/5">{marker.name}</td>
+            <td className="px-4 py-2 w-1/5">{findCountryNameByCode(marker.country)}</td>
+            <td className="px-4 py-2 w-1/5">{marker.type}</td>
+            <td className="px-4 py-2 w-1/5">{marker.ipv6 ? "Yes" : "No"}</td>
+            <td className="px-4 py-2 w-1/5">{marker.Instances}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    {/* Pagination */}
+    <nav className="py-2">
+      <ul className="pagination flex justify-center space-x-2">
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''} hover:cursor-pointer`}>
+          <div className="page-link" aria-label="Previous" onClick={() => paginate(currentPage - 1)}>
+            <span aria-hidden="true">&laquo;</span>
+            <span className="sr-only">Previous</span>
+          </div>
+        </li>
+        {[...Array(endPage - startPage + 1).keys()].map((i) => (
+          <li key={i + startPage} className={`page-item ${currentPage === i + startPage ? 'active' : ''} hover:cursor-pointer`}>
+            <div onClick={() => paginate(i + startPage)} className="page-link">
+              {i + startPage}
             </div>
+          </li>
+        ))}
+        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''} hover:cursor-pointer`}>
+          <div className="page-link" aria-label="Next" onClick={() => paginate(currentPage + 1)}>
+            <span aria-hidden="true">&raquo;</span>
+            <span className="sr-only">Next</span>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
 
-            {/* Additional Components */}
-            {/* <div className="mt-4">
-             
-              <div className="font-bold text-2xl text-center p-3">
-                Asia Instances
-              </div>
-              <Pie_Asia data={aggregatedDataAsia} />
+
             
-            </div> */}
           </div>
         </div>
       </div>
