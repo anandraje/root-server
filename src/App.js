@@ -342,43 +342,43 @@ const App = () => {
     return null; // Return null if code is not found
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const fetchedData = await Promise.all(
-  //         jsonFiles.map(async (fileName) => {
-  //           // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
-  //           const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
-  //           return response.data;
-  //         })
-  //       );
-  //       setCombinedData(fetchedData.flat()); 
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-    
-
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            const response = await axios.get(`http://localhost:5001/api/${fileName}`);
+            // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
+            const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
             return response.data;
           })
         );
-        setCombinedData(fetchedData.flat());
+        setCombinedData(fetchedData.flat()); 
       } catch (error) {
         console.error("Error fetching data:", error);
-        
       }
     };
+    
 
     fetchData();
   }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const fetchedData = await Promise.all(
+  //         jsonFiles.map(async (fileName) => {
+  //           const response = await axios.get(`http://localhost:5001/api/${fileName}`);
+  //           return response.data;
+  //         })
+  //       );
+  //       setCombinedData(fetchedData.flat());
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+        
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
   const markers = combinedData.flatMap((data, index) =>
     data.Sites.map((site) => ({
       rootInstanceName: jsonFiles[index],
