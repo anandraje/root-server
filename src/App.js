@@ -833,7 +833,7 @@ const App = () => {
     <>
       <div className="flex flex-col bg-gray-200 min-h-screen">
       {/* Header Section */}
-      <div className="font-bold text-3xl text-center p-4 bg-gray-200">
+      <div className="font-bold text-3xl text-center p-4 bg-gray-500">
         Global DNS Root Servers Visualizer
       </div>
 
