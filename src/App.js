@@ -354,7 +354,7 @@ const App = () => {
         );
         setCombinedData(fetchedData.flat()); 
       } catch (error) {
-        console.error("Error fetching data:", error);
+        
       }
     };
     
@@ -372,7 +372,7 @@ const App = () => {
   //       );
   //       setCombinedData(fetchedData.flat());
   //     } catch (error) {
-  //       console.error("Error fetching data:", error);
+  //       
         
   //     }
   //   };
@@ -399,7 +399,7 @@ const App = () => {
       Instances: site.Instances,
     }))
   );
-  console.log("markers", markers);
+  
    const aggregateDataByContinent = (data) => {
     const result = {};
     data.forEach((item) => {
@@ -430,17 +430,17 @@ const App = () => {
     return result;
   };
   const aggregatedDataAsia = aggregateDataByRegion(markers);
-  console.log(aggregatedDataAsia);
+  
 
   const aggregatedData = aggregateDataByContinent(markers);
-  console.log(markers);
-  console.log("yyy", aggregatedData);
+  
+  
   const handleCountrySelection = (countryCode) => {
     setSelectedCountry(countryCode);
   };
   const handleContinentSelection = (continent) => {
     setSelectedContinent(continent);
-    console.log("XYZ",continent)
+    
   };
   const handleCheckedLabels = (checkedLabels) => {
     if (checkedLabels.includes('All')) {
@@ -532,7 +532,7 @@ const App = () => {
     (acc, count) => acc + count,
     0
   );
-  console.log(markers);
+  
   const filteredMarkersForTable =
   values.length === 0 || values.includes("All")
     ? markers.filter(marker => selectedCountry2 === "" || marker.country === selectedCountry2)
@@ -760,7 +760,7 @@ const App = () => {
   ];
   
   getCountByCountry();
-  console.log("hii", filteredMarkersForTable);
+  
   const options = [
     { value: "All", label: "All" },
     { value: "A", label: "A" },
@@ -842,10 +842,10 @@ const App = () => {
     } else {
       // Handle the case where selectedOption is null or undefined
       setSelectedCountry2("");
-      console.log('No country selected');
+      
     }
   };
-  console.log(currentItems)
+  
 
   return (
     <>
