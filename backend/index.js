@@ -1,63 +1,33 @@
 const express = require('express');
 const axios = require('axios');
 const NodeCache = require('node-cache');
+const cors = require('cors');
 const app = express();
-const port = 5001; 
-
+const port = process.env.PORT || 5001;
 
 const cache = new NodeCache({ stdTTL: 60 });
+
+// Enable CORS for all routes
+app.use(cors());
 
 app.get('/api/:root', async (req, res) => {
   const { root } = req.params;
   const remoteUrl = `https://root-servers.org/root/${root}/json/`;
 
   try {
-
     let data = cache.get(remoteUrl);
     if (!data) {
-   
       const response = await axios.get(remoteUrl);
       data = response.data;
-
       cache.set(remoteUrl, data);
     }
-    
     res.json(data);
   } catch (err) {
-   
+    console.error(`Error fetching data from ${remoteUrl}:`, err.message);
     res.status(err.response?.status || 500).send('File not found or error fetching file');
   }
 });
 
-
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
-
-// const express = require('express');
-// const path = require('path');
-// const app = express();
-// const port = 5001; // Choose your port
-
-// // Serve static files (your JSON data)
-// app.use(express.static('data'));
-
-// // Define API endpoints
-// app.get('/api/:root', (req, res) => {
-//   const { root } = req.params;
-
-//   // Sanitize the root parameter to remove any newlines or other unwanted characters
-//   const sanitizedRoot = root.replace(/[^a-zA-Z0-9_-]/g, '');
-
-//   const filePath = path.join(__dirname, 'data', `${sanitizedRoot}.json`);
-//   res.sendFile(filePath, (err) => {
-//     if (err) {
-//       res.status(404).send('File not found');
-//     }
-//   });
-// });
-
-// // Start the server
-// app.listen(port, () => {
-//   console.log(`Server is running on http://localhost:${port}`);
-// });

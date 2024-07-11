@@ -342,22 +342,40 @@ const App = () => {
     return null; // Return null if code is not found
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const fetchedData = await Promise.all(
+  //         jsonFiles.map(async (fileName) => {
+  //           // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
+  //           const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
+  //           return response.data;
+  //         })
+  //       );
+  //       setCombinedData(fetchedData.flat()); 
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+    
+
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
-            const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
+            const response = await axios.get(`http://localhost:5001/api/${fileName}`);
             return response.data;
           })
         );
-        setCombinedData(fetchedData.flat()); 
+        setCombinedData(fetchedData.flat());
       } catch (error) {
         console.error("Error fetching data:", error);
+        
       }
     };
-    
 
     fetchData();
   }, []);
@@ -833,7 +851,7 @@ const App = () => {
     <>
       <div className="flex flex-col bg-gray-200 min-h-screen">
       {/* Header Section */}
-      <div className="font-bold text-3xl text-center p-4 bg-gray-500">
+      <div className="font-bold text-3xl text-center p-4 bg-gray-100">
         Global DNS Root Servers Visualizer
       </div>
 
