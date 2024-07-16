@@ -1,0 +1,23 @@
+.select__option {
+  padding: 10px;
+}
+
+.select__option--is-disabled {
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.select__option--is-selected {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.select__control {
+  border-color: #ccc;
+  box-shadow: none;
+}
+
+.select__control:hover {
+  border-color: #aaa;
+}

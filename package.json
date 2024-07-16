@@ -24,6 +24,7 @@
     "react-leaflet-cluster": "^2.1.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-scripts": "5.0.1",
+    "react-select": "^5.8.0",
     "react-tooltip": "^5.27.0",
     "recharts": "^2.12.7",
     "stream-browserify": "^3.0.0",

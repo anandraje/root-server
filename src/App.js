@@ -404,7 +404,7 @@ const App = () => {
       Instances: site.Instances,
     }))
   );
-  
+  const markerCountries = new Set(markers.map(marker => marker.country));
    const aggregateDataByContinent = (data) => {
     const result = {};
     data.forEach((item) => {
@@ -944,7 +944,10 @@ const App = () => {
                 <Legend
                   countrycode={handleCountrySelection}
                   sendCheckedLabels={handleCheckedLabels}
-                  continentselected={handleContinentSelection}
+                  continentselected={handleContinentSelection} 
+                  marker={markers} 
+
+                
                 />
                 <table className="table-auto w-full h-full">
                   <thead>

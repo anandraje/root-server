@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import * as Icon from 'react-icons/fi';
 import Checkbox from 'react-custom-checkbox';
-import Select from 'react-dropdown-select';
-const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
+import Select from 'react-select';
+
+import './Legen.css'
+import { isDisabled } from '@testing-library/user-event/dist/utils';
+const Legend = ({ countrycode, sendCheckedLabels, continentselected ,marker}) => {
   const colorMapping1 = {
     A: '#FF0000',    // Red
     B: '#0000FF',    // Blue
@@ -23,9 +26,12 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     All: '#700000',  // Dark Red
   };
 
-  
+  const markerCountries = new Set(marker.map(marker => marker.country));
+console.log("lo",markerCountries)
+// Update countries array with disabled or styled options
+  const [country,selectedcountry] =useState({value:"All",label:"All"})
   const [checkedLabels, setCheckedLabels] = useState(['All']);
-
+  
   const handleCheckboxChange = (label) => {
     if (label === 'All') {
       setCheckedLabels(['All']);
@@ -55,21 +61,24 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
   };
   const handleChange = (selectedOption) => {
     if(selectedOption.value=="All"){
-      console.log("hii")
+
       setFilteredCountries(countries)
     }
+    selectedcountry({ value: "All", label: "All" });
     sendContinenttoApp(selectedOption.value);
   };
   const handleChange2 = (selectedOption) => {
     if(selectedOption.value=="All"){
-      console.log("hii")
-      setFilteredCountries(countries)
+      
+      setFilteredCountries(filteredCountries)
     }
+   
     sendCountryToApp(selectedOption.value);
   };
-  
+  const [selectedContinent, setSelectedContinent] = useState({value:"All",label:"All"})
   const countries = [
-    { value: 'All', label: 'All', continent: 'All' },
+    { value: 'All', label: 'All', continent: selectedContinent },
+
     { value: 'AF', label: 'Afghanistan', continent: 'Asia' },
     { value: 'AL', label: 'Albania', continent: 'Europe' },
     { value: 'DZ', label: 'Algeria', continent: 'Africa' },
@@ -119,7 +128,7 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     { value: 'HR', label: 'Croatia', continent: 'Europe' },
     { value: 'CU', label: 'Cuba', continent: 'North_America' },
     { value: 'CW', label: 'Curaçao', continent: 'North_America' },
-    { value: 'CY', label: 'Cyprus', continent: 'Asia' },
+    { value: 'CY', label: 'Cyprus', continent: 'Europe' },
     { value: 'CZ', label: 'Czech Republic', continent: 'Europe' },
     { value: 'DK', label: 'Denmark', continent: 'Europe' },
     { value: 'DJ', label: 'Djibouti', continent: 'Africa' },
@@ -275,7 +284,7 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     { value: 'VN', label: 'Vietnam', continent: 'Asia' },
     { value: 'YE', label: 'Yemen', continent: 'Asia' },
     { value: 'ZM', label: 'Zambia', continent: 'Africa' },
-    { value: 'ZW', label: 'Zimbabwe', continent: 'Africa' }
+    { value: 'ZW', label: 'Zimbabwe', continent: 'Africa'  }
   ];
   
   const options = [
@@ -287,18 +296,31 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
     { value: 'Africa', label: 'Africa' },
     { value: 'Europe', label: 'Europe' },
   ];
-  const [selectedContinent, setSelectedContinent] = useState(null);
+  
   const [filteredCountries, setFilteredCountries] = useState(countries);
+  const updatedCountries =filteredCountries.map(country => {
+    const hasMarker = markerCountries.has(country.value) || country.value=="All";
+    return {
+      ...country,
+      isDisabled: !hasMarker, // Add a property to indicate if the country should be disabled
+    };
+  });
+console.log(updatedCountries)
   const handleContinentChange = (selectedOption) => {
     setSelectedContinent(selectedOption);
-    console.log("continent",selectedContinent)
-    const filtered = countries.filter(country => country.continent === selectedOption.value || country.continent==="All");
-    console.log(filtered);
+    selectedcountry({ value: "All", label: "All" });
+    
+    const filtered = countries.filter(country => country.continent === selectedOption.value || country.value=="All");
+    console.log("hey",country);
+    setFilteredCountries({value:"All",label:"All"})
     setFilteredCountries(filtered);
+    handleChange2({label:"All"}); 
     handleChange(selectedOption);
   };
-
+  console.log("bol",country)
   const handleCountryChange = (selectedOption) => {
+    console.log("heyy",country);
+    selectedcountry(selectedOption)
     handleChange2(selectedOption);
   };
 
@@ -307,38 +329,39 @@ const Legend = ({ countrycode, sendCheckedLabels, continentselected }) => {
       <div className='mb-2'>
         <div className='text-md font-semibold mb-2'>Continent</div>
         <Select
-      options={options}
-      onChange={(selectedOption) => {
-        if (selectedOption && selectedOption.length > 0) {
-          handleContinentChange(selectedOption[0]);
+          options={options}
+          
+          onChange={(selectedOption) => {
+            if (selectedOption) {
+              handleContinentChange(selectedOption);
+            }
+          }}
+          value={selectedContinent}
+          className='w-full  border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
+        />
       
-        } else {
-    
-           // Handle null case as needed
-        }
-      }}
-      // onChange={handleContinentChange}
-      className='w-full py-1 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
-    />
       </div>
       <div>
         <div className='text-md font-semibold mb-2'>Country</div>
- 
-         <Select
-      
-      options={filteredCountries}
-         
-      onChange={(selectedOption) => {
-        if (selectedOption && selectedOption.length > 0) {
-          handleCountryChange(selectedOption[0]);
-      
-        } else {
-    
-           // Handle null case as needed
-        }
-      }}
-      className='w-full py-1 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
-    />
+        <Select
+          options={updatedCountries}
+          onChange={(selectedOption) => {
+            if (selectedOption) {
+              handleCountryChange(selectedOption);
+            }
+          }}
+          value={country}
+          className='w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500'
+          styles={{
+            option: (provided, state) => ({
+              ...provided,
+              opacity: state.isDisabled ? 0.5 : 1,
+              cursor: state.isDisabled ? 'not-allowed' : 'default',
+            }),
+          }}
+        />
+
+   
       </div>
       <div className='mt-2'>
         <div className='text-md font-semibold mb-2'>Root Instances</div>
