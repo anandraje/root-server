@@ -365,7 +365,7 @@ const App = () => {
 
     fetchData();
   }, []);
-  console.log(combinedData)
+  console.log("live",combinedData)
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
