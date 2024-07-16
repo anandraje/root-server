@@ -342,25 +342,30 @@ const App = () => {
     return null; // Return null if code is not found
   };
 
+
   useEffect(() => {
     const fetchData = async () => {
+      const jsonFiles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
       try {
         const fetchedData = await Promise.all(
           jsonFiles.map(async (fileName) => {
-            // const response = await axios.get(`https://root-servers.org/root/${fileName}/json/`);
-            const response = await axios.get(`${process.env.PUBLIC_URL}/data/${fileName}.json`);
-            return response.data;
+            const response = await fetch(`https://root-servers.org/root/${fileName}/json/`);
+            if (!response.ok) {
+              throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
           })
         );
-        setCombinedData(fetchedData.flat()); 
+        setCombinedData(fetchedData.flat());
       } catch (error) {
-        
+        console.log(error)
       }
     };
-    
 
     fetchData();
   }, []);
+  console.log(combinedData)
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
