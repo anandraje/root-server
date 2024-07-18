@@ -17,7 +17,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Select from "react-dropdown-select";
 import Piechart from "./Pie.js";
 import regions from "./Regions.js";
-
+import Papa from 'papaparse';
+import  {Link}  from "react-router-dom";
 const jsonFiles = [
   "A",
   "B",
@@ -527,6 +528,26 @@ const App = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+  const download_CSV = () => {
+    const data =sortedMarkers.map((marker) => ({
+      RootInstance: marker.rootInstanceName,
+      City: marker.name,
+      Country: findCountryNameByCode(marker.country),
+      Type: marker.type,
+      IPv6Enabled: marker.ipv6 ? 'Yes' : 'No',
+      Instances: marker.Instances,
+    }));
+
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'table_data.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const counts = getCountByRootInstance();
   const totalCount = Object.values(counts).reduce(
     (acc, count) => acc + count,
@@ -867,8 +888,8 @@ const App = () => {
         {/* Main Content Area */}
         <div className="flex-1 relative">
           {/* Map Section */}
-          <div className="w-full h-[120vh] lg:h-[80vh] bg-gray-100  flex flex-col lg:flex-row items-center">
-            <div className="  h-full w-full lg:w-4/5 p-2">
+          <div className="w-full  lg:h-[80vh] bg-gray-100  flex flex-col lg:flex-row items-center">
+            <div className="lg:h-full  h-[50vh] w-full lg:w-5/6 p-2">
               <MapContainer
                 center={[51.505, -0.09]}
                 zoom={2}
@@ -1133,11 +1154,21 @@ const App = () => {
           </div>
         </li>
       </ul>
+      <div className='mt-4 flex justify-end md:justify-between'>
+      <button
+        onClick={download_CSV}
+        className='bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 w-full md:w-auto'
+      >
+        Download CSV
+      </button>
+    </div>
     </nav>
   </div>
 </div>
 
-
+<footer className="mt-auto bg-gray-100 p-4 text-center text-sm text-gray-600">
+        Data sourced from <Link to="https://root-servers.org/" target="_blank" className="text-blue-500 hover:underline">https://root-servers.org/</Link>
+      </footer>
             
           </div>
         </div>
