@@ -311,15 +311,15 @@ console.log(updatedCountries)
     selectedcountry({ value: "All", label: "All" });
     
     const filtered = countries.filter(country => country.continent === selectedOption.value || country.value=="All");
-    console.log("hey",country);
+   
     setFilteredCountries({value:"All",label:"All"})
     setFilteredCountries(filtered);
     handleChange2({label:"All"}); 
     handleChange(selectedOption);
   };
-  console.log("bol",country)
+
   const handleCountryChange = (selectedOption) => {
-    console.log("heyy",country);
+  
     selectedcountry(selectedOption)
     handleChange2(selectedOption);
   };
