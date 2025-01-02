@@ -385,26 +385,64 @@ const App = () => {
 
   //   fetchData();
   // }, []);
-  const markers = combinedData.flatMap((data, index) =>
-    data.Sites.map((site) => ({
-      rootInstanceName: jsonFiles[index],
-      name: site.Town,
-      country: site.Country,
-      Country: findCountryNameByCode(site.Country),
-      Latitude: site.Latitude,
-      continent: findContinentNameByCode(site.Country),
-      Longitude: site.Longitude,
-      ID: Math.random(),
-      region: findRegionNameByCode(site.Country),
-      ipv6: site.IPv6,
-      IPv4: data.IPv4,
-      type: site.Type,
-      Operator: data.Operator,
-      IPv6: data.IPv6,
-      ASN: data.ASN,
-      Instances: site.Instances,
-    }))
-  );
+  // const markers = combinedData.flatMap((data, index) =>
+    // data.Sites.map((site) => ({
+      
+    //   rootInstanceName: jsonFiles[index],
+    //   name: site.Town,
+    //   country: site.Country,
+    //   Country: findCountryNameByCode(site.Country),
+    //   Latitude: site.Latitude,
+    //   continent: findContinentNameByCode(site.Country),
+    //   Longitude: site.Longitude,
+    //   ID: Math.random(),
+    //   region: findRegionNameByCode(site.Country),
+    //   ipv6: site.IPv6,
+    //   IPv4: data.IPv4,
+    //   type: site.Type,
+    //   Operator: data.Operator,
+    //   IPv6: data.IPv6,
+    //   ASN: data.ASN,
+    //   Instances: site.Instances,
+    // }))
+    // );
+    const markers = combinedData.flatMap((data, index) => 
+      data.Sites.map((site) => {
+        // Loggin each data entry and its index
+        // console.log("Processing data:", {
+        //   index,
+        //   site,
+        //   rootInstanceName: jsonFiles[index],
+        //   Latitude: site.Latitude,
+        //   Longitude: site.Longitude,
+        // });
+        
+        if (site.Latitude === null || site.Longitude === null) {
+          alert(`Missing latitude/longitude for root: ${jsonFiles[index]}`);
+        }    
+
+        return {
+          rootInstanceName: jsonFiles[index],
+          name: site.Town,
+          country: site.Country,
+          Country: findCountryNameByCode(site.Country),
+          Latitude: site.Latitude !== null ? site.Latitude : -999, // Adding default value to null Latitude data
+          continent: findContinentNameByCode(site.Country),
+          Longitude: site.Longitude !== null ? site.Longitude : -999, // Adding default value to null Longitude data
+          ID: Math.random(),
+          region: findRegionNameByCode(site.Country),
+          ipv6: site.IPv6,
+          IPv4: data.IPv4,
+          type: site.Type,
+          Operator: data.Operator,
+          IPv6: data.IPv6,
+          ASN: data.ASN,
+          Instances: site.Instances,
+        };
+      })
+    );
+    
+
   const markerCountries = new Set(markers.map(marker => marker.country));
    const aggregateDataByContinent = (data) => {
     const result = {};
