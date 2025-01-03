@@ -86,6 +86,7 @@ const createCustomIcon = (color, instanceName) => {
 const App = () => {
   const [selectedContinent, setSelectedContinent] = useState("All");
   const mapRef = useRef(null);
+  const [selectedRoot, setSelectedRoot] = useState(null);
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCountry2, setSelectedCountry2] = useState("");
@@ -442,7 +443,6 @@ const App = () => {
       })
     );
     
-
   const markerCountries = new Set(markers.map(marker => marker.country));
    const aggregateDataByContinent = (data) => {
     const result = {};
@@ -879,7 +879,26 @@ const App = () => {
     }
     return sortConfig.key === key ? sortConfig.direction : undefined;
   };
-
+  const handleRootChange = (values) => {
+    setSelectedRoot(values[0].value); // Assuming values is an array of selected options
+    setSelectedCountry2(""); // Reset selected country
+    setvalues(values.map((v) => v.value));
+    console.log("Root",selectedCountry2)
+    setCurrentPage(1); // Reset pagination for table 1 or any related action
+    handleCountrySelectionForTable(null); // Reset or handle country selection action
+  };
+  
+  // Handler for country select change
+  const handleCountryChange = (selectedOption) => {
+    console.log("Country",selectedCountry2)
+    if (selectedOption) {
+      setSelectedCountry2(selectedOption.value); // Set selected country
+      handleCountrySelectionForTable(selectedOption[0]); // Handle selection action
+    } else {
+      setSelectedCountry2(null); // Reset selected country
+      handleCountrySelectionForTable(null); // Handle null case
+    }
+  };
   // Calculate the indexes of the first and last items on the current page
   const indexOfLastItem = currentPage * rowsPerPage;
   const indexOfFirstItem = indexOfLastItem - rowsPerPage;
@@ -909,8 +928,11 @@ const App = () => {
       
     }
   };
-  
 
+
+  const filteredMarkersWithValidCoordinates = filteredMarkers.filter(marker => 
+    marker.Latitude != null && marker.Longitude != null
+  );
   return (
     <>
       <div className="flex flex-col bg-gray-200 min-h-screen">
@@ -948,7 +970,9 @@ const App = () => {
                   zoomToBoundsOnClick={true}
                   spiderfyOnMaxZoom={true}
                 >
-                  {filteredMarkers.map((marker) => (
+                  
+                  {filteredMarkersWithValidCoordinates.map((marker) => (
+                 
                     (!selectedCountry ||
                       marker.country === selectedCountry ||
                       selectedCountry === "All") &&
@@ -1083,33 +1107,34 @@ const App = () => {
         Root Server Deployment by City
       </div>
       <div className="flex flex-col md:flex-row justify-center my-2 space-y-2 md:space-y-0 md:space-x-4">
-        <Select
-          options={options}
-          labelField="label"
-          valueField="value"
-          onChange={(values) => {
-            setvalues(values.map((v) => v.value));
-            setCurrentPage(1); // Reset pagination for table 1
-          }}
-          style={{ width: "15rem", backgroundColor: "white", color: "black" }}
-          searchable={false}
-          placeholder={"Roots"}
-          dropdownGap={0}
-        />
-        <Select
-          options={countryOptions}
-          onChange={(selectedOption) => {
-            if (selectedOption) {
-              handleCountrySelectionForTable(selectedOption[0]);
-            } else {
-              handleCountrySelectionForTable(null); // Handle null case
-            }
-          }}
-          value={selectedCountry2 ? countryOptions.find((option) => option.value === selectedCountry2) : null}
-          style={{ width: "15rem", backgroundColor: "white", color: "black" }}
-          placeholder="Select Country"
-          searchable={true}
-        />
+      <Select
+  options={options}
+  labelField="label"
+  valueField="value"
+  onChange={handleRootChange}
+  style={{ width: "15rem", backgroundColor: "white", color: "black" }}
+  searchable={false}
+  placeholder={"Roots"}
+  dropdownGap={0}
+/>
+<Select
+  options={[
+    
+    ...countryOptions.filter(option =>
+      selectedRoot === "All" || option.value === "" || markers.some(
+        marker =>
+          marker.rootInstanceName === selectedRoot &&
+          (marker.country === option.value || option.value === "")
+      )
+    )
+  ]}
+  onChange={handleCountryChange}
+  value={selectedCountry2 ? { label: selectedCountry2, value: selectedCountry2} : null}
+  style={{ width: "15rem", backgroundColor: "white", color: "black" }}
+  placeholder={selectedCountry2 === "" ? "All Countries" : "Select Country"}
+  searchable={true}
+/>
+
       </div>
     </div>
 
@@ -1203,8 +1228,8 @@ const App = () => {
     </nav>
   </div>
 </div>
-
-<footer className="mt-auto bg-gray-100 p-4 text-center text-sm text-gray-600">
+<div>{}</div>
+<footer className="mt-auto bg-gray-100 p-4 text-center text-md text-gray-600">
         Data sourced from <Link to="https://root-servers.org/" target="_blank" className="text-blue-500 hover:underline">https://root-servers.org/</Link>
       </footer>
             
