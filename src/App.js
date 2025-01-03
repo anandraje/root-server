@@ -417,9 +417,9 @@ const App = () => {
         //   Longitude: site.Longitude,
         // });
         
-        if (site.Latitude === null || site.Longitude === null) {
-          alert(`Missing latitude/longitude for root: ${jsonFiles[index]}`);
-        }    
+        // if (site.Latitude === null || site.Longitude === null) {
+        //   alert(`Missing latitude/longitude for root: ${jsonFiles[index]}`);
+        // }    
 
         return {
           rootInstanceName: jsonFiles[index],
