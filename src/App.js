@@ -86,7 +86,7 @@ const createCustomIcon = (color, instanceName) => {
 const App = () => {
   const [selectedContinent, setSelectedContinent] = useState("All");
   const mapRef = useRef(null);
-
+  const didFetchRef = useRef(false);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCountry2, setSelectedCountry2] = useState("");
   const [checkedLabels, setCheckedLabels] = useState([]);
@@ -318,7 +318,6 @@ const App = () => {
       { code: "PW", name: "Palau" },
     ],
   };
-
   const findCountryNameByCode = (code) => {
     for (const region in continentToCountries) {
       const countries = continentToCountries[region];
@@ -344,29 +343,73 @@ const App = () => {
   };
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const jsonFiles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
-      try {
-        const fetchedData = await Promise.all(
-          jsonFiles.map(async (fileName) => {
-            const response = await fetch(`https://root-servers.org/root/${fileName}/json/`);
-            if (!response.ok) {
-              throw new Error(`Network response was not ok: ${response.statusText}`);
-            }
-            const data = await response.json();
-            return data;
-          })
-        );
-        setCombinedData(fetchedData.flat());
-      } catch (error) {
-        console.log(error)
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const jsonFiles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+  //     try {
+  //       const fetchedData = await Promise.all(
+  //         jsonFiles.map(async (fileName) => {
+  //           //const response = await fetch(`https://root-servers.org/root/${fileName}/json/`);
+  //           const response = await fetch(`https://v2.aiori.in/api/common/root-viz/${fileName}`);
+  //           if (!response.ok) {
+  //             throw new Error(`Network response was not ok: ${response.statusText}`);
+  //           }
+  //           const data = await response.json();
+  //           return data;
+  //         })
+  //       );
+  //       setCombinedData(fetchedData.flat());
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
-  console.log("live",combinedData)
+  //   fetchData();
+  // }, []);
+  // console.log("live",combinedData)
+
+function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function fetchWithLimit(files, limit = 3) {
+      const results = [];
+      let index = 0;
+
+      async function worker() {
+        while (index < files.length) {
+          const file = files[index++];
+          try {
+            const res = await fetch(`https://v2.aiori.in/api/common/root-viz/${file}`);
+           // const res = await fetch(`http://localhost:8000/api/common/root-viz/${file}`);
+            if (!res.ok) continue;
+            const data = await res.json();
+            results.push(data);
+          } catch (e) {
+            console.log("Error fetching", file);
+          }
+          // ADD DELAY TO AVOID RATE LIMIT
+          await sleep(300);
+        }
+      }
+
+      const workers = Array.from({ length: limit }, worker);
+      await Promise.all(workers);
+      return results;
+    }
+    
+
+    useEffect(() => {
+      if (didFetchRef.current) return;
+      didFetchRef.current = true;
+      fetchWithLimit(['A','B','C','D','E','F','G','H','I','J','K','L','M'], 1).then(r => {
+        setCombinedData(r.flat());
+      });
+    }, []);
+
+
+
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -409,17 +452,17 @@ const App = () => {
     const markers = combinedData.flatMap((data, index) => 
       data.Sites.map((site) => {
         // Loggin each data entry and its index
-        // console.log("Processing data:", {
-        //   index,
-        //   site,
-        //   rootInstanceName: jsonFiles[index],
-        //   Latitude: site.Latitude,
-        //   Longitude: site.Longitude,
-        // });
+        console.log("Processing data:", {
+          index,
+          site,
+          rootInstanceName: jsonFiles[index],
+          Latitude: site.Latitude,
+          Longitude: site.Longitude,
+        });
         
-        if (site.Latitude === null || site.Longitude === null) {
-          alert(`Missing latitude/longitude for root: ${jsonFiles[index]}`);
-        }    
+        // if (site.Latitude === null || site.Longitude === null) {
+        //   alert(`Missing latitude/longitude for root: ${jsonFiles[index]}`);
+        // }    
 
         return {
           rootInstanceName: jsonFiles[index],
