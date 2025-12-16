@@ -370,44 +370,109 @@ const App = () => {
   // }, []);
   // console.log("live",combinedData)
 
-function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+// function sleep(ms) {
+//       return new Promise(resolve => setTimeout(resolve, ms));
+//     }
+//
+//     async function fetchWithLimit(files, limit = 3) {
+//       const results = [];
+//       let index = 0;
+//
+//       async function worker() {
+//         while (index < files.length) {
+//           const file = files[index++];
+//           try {
+//             const res = await fetch(`https://v2.aiori.in/api/common/root-viz/${file}`);
+//            // const res = await fetch(`http://localhost:8000/api/common/root-viz/${file}`);
+//             if (!res.ok) continue;
+//             const data = await res.json();
+//             results.push(data);
+//           } catch (e) {
+//             console.log("Error fetching", file);
+//           }
+//           // ADD DELAY TO AVOID RATE LIMIT
+//           await sleep(300);
+//         }
+//       }
+//
+//       const workers = Array.from({ length: limit }, worker);
+//       await Promise.all(workers);
+//       return results;
+//     }
+//
+//
+//     useEffect(() => {
+//       if (didFetchRef.current) return;
+//       didFetchRef.current = true;
+//       fetchWithLimit(['A','B','C','D','E','F','G','H','I','J','K','L','M'], 1).then(r => {
+//         setCombinedData(r.flat());
+//       });
+//     }, []);
 
-    async function fetchWithLimit(files, limit = 3) {
-      const results = [];
-      let index = 0;
 
-      async function worker() {
-        while (index < files.length) {
-          const file = files[index++];
-          try {
-            const res = await fetch(`https://v2.aiori.in/api/common/root-viz/${file}`);
-           // const res = await fetch(`http://localhost:8000/api/common/root-viz/${file}`);
-            if (!res.ok) continue;
-            const data = await res.json();
-            results.push(data);
-          } catch (e) {
-            console.log("Error fetching", file);
-          }
-          // ADD DELAY TO AVOID RATE LIMIT
-          await sleep(300);
-        }
+  //Added on 16-12-2025
+  var TemplateResult = {
+    "ASN": null,
+    "BGP Community Convention": "",
+    "BGP Extended Community Convention": "",
+    "BGP Large Community Convention": "",
+    "Contact Email": "",
+    "Homepage": "",
+    "IPv4": "",
+    "IPv6": "",
+    "Identifier Naming Convention": "",
+    "Operator": "",
+    "Peering Policy": "",
+    "RSSAC001": "",
+    "RSSAC002": "",
+    "Sites": [
+      {
+        "BGP Intermediate AS": null,
+        "BGP Origin AS": null,
+        "BGP Site Identifier": "",
+        "Country": "",
+        "Created": "",
+        "ID": "",
+        "IPv4": false,
+        "IPv6": false,
+        "Identifiers": [],
+        "Instances": 0,
+        "Latitude": null,
+        "Longitude": null,
+        "Status": "",
+        "Town": "",
+        "Type": "",
+        "Updated": ""
       }
+    ],
+    "Statistics": "",
+    "Updated": ""
+  }
 
-      const workers = Array.from({ length: limit }, worker);
-      await Promise.all(workers);
-      return results;
-    }
-    
-
-    useEffect(() => {
+  useEffect(() => {
       if (didFetchRef.current) return;
       didFetchRef.current = true;
-      fetchWithLimit(['A','B','C','D','E','F','G','H','I','J','K','L','M'], 1).then(r => {
-        setCombinedData(r.flat());
-      });
-    }, []);
+
+      async function loadFromServer() {
+          try {
+              //const res = await fetch("http://localhost:8000/api/common/root-data");
+              const res = await fetch("https://v2.aiori.in/api/common/root-data");
+              const json = await res.json();
+
+              const arr = Object.values(json.data);
+              arr.forEach((element,index) => {
+                if(Object.keys(element).length === 0){
+                  arr[index] = TemplateResult;
+                }
+              });
+              setCombinedData(arr);
+          } catch (err) {
+              console.error("Error loading cached root data:", err);
+          }
+      }
+
+      loadFromServer();
+  }, []);
 
 
 
