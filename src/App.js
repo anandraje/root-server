@@ -425,26 +425,7 @@ const App = () => {
     "Peering Policy": "",
     "RSSAC001": "",
     "RSSAC002": "",
-    "Sites": [
-      {
-        "BGP Intermediate AS": null,
-        "BGP Origin AS": null,
-        "BGP Site Identifier": "",
-        "Country": "",
-        "Created": "",
-        "ID": "",
-        "IPv4": false,
-        "IPv6": false,
-        "Identifiers": [],
-        "Instances": 0,
-        "Latitude": null,
-        "Longitude": null,
-        "Status": "",
-        "Town": "",
-        "Type": "",
-        "Updated": ""
-      }
-    ],
+    "Sites": [],
     "Statistics": "",
     "Updated": ""
   }
@@ -459,12 +440,15 @@ const App = () => {
               const res = await fetch("https://v2.aiori.in/api/common/root-data");
               const json = await res.json();
 
-              const arr = Object.values(json.data);
-              arr.forEach((element,index) => {
-                if(Object.keys(element).length === 0){
-                  arr[index] = TemplateResult;
-                }
-              });
+              const orderedRoots = ["A","B","C","D","E","F","G","H","I","J","K","L","M"];
+
+              const arr = orderedRoots.map(root => ({
+              root,
+              ...(json.data[root] && Object.keys(json.data[root]).length > 0
+                ? json.data[root]
+                : TemplateResult)
+            }));
+
               setCombinedData(arr);
           } catch (err) {
               console.error("Error loading cached root data:", err);
@@ -532,7 +516,7 @@ const App = () => {
         // }    
 
         return {
-          rootInstanceName: jsonFiles[index],
+          rootInstanceName: data.root,
           name: site.Town,
           country: site.Country,
           Country: findCountryNameByCode(site.Country),
